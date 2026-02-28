@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#555555</color>
+
+
+    <!-- Background and general theme colors -->
+    <color name="background_light">#FDFFF8</color>
+    <color name="button_green">#73903F</color>
+
+    <!-- Card background colors -->
+    <color name="card_happy">#C5D8A4</color>
+    <color name="card_relieved">#FFB8C7</color>
+    <color name="card_sad">#CBE2FF</color>
+    <color name="card_loved">#FFC7B6</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+
+    <!-- Nav Color -->
+</resources>

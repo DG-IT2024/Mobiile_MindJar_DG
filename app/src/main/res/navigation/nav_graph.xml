@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Bottom "tab" destinations -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.myapplication.ui.home.HomeFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/realizationFragment"
+        android:name="com.example.myapplication.ui.realization.RealizationFragment"
+        android:label="Realization">
+
+        <action
+            android:id="@+id/action_realizationFragment_to_myJourneyFragment"
+            app:destination="@id/myJourneyFragment" />
+
+        <action
+            android:id="@+id/action_realizationFragment_to_entryDetailsFragment"
+            app:destination="@id/entryDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/hopeFragment"
+        android:name="com.example.myapplication.ui.hope.HopeFragment"
+        android:label="Hope" />
+
+    <fragment
+        android:id="@+id/videosFragment"
+        android:name="com.example.myapplication.ui.videos.VideosFragment"
+        android:label="Videos" />
+
+    <fragment
+        android:id="@+id/hotlineFragment"
+        android:name="com.example.myapplication.ui.hotline.HotlineFragment"
+        android:label="Hotline" />
+
+    <!-- Deeper screens -->
+    <fragment
+        android:id="@+id/myJourneyFragment"
+        android:name="com.example.myapplication.ui.realization.MyJourneyFragment"
+        android:label="My Journey" />
+
+    <fragment
+        android:id="@+id/entryDetailsFragment"
+        android:name="com.example.myapplication.ui.realization.EntryDetailsFragment"
+        android:label="Entry Details" />
+
+</navigation>

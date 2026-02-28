@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:background="@color/background_light"
+    tools:context=".ui.hope.HopeFragment">
+
+    <!--    Horizontal Constraints-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalConstraint1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"/>
+
+    <!--    Vertical Constraints-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalConstraint1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.10"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@id/verticalConstraint2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90"/>
+
+    <!--    Header -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#F4FCD9"
+        app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+        app:layout_constraintStart_toStartOf="@+id/verticalConstraint1"
+        app:layout_constraintTop_toTopOf="@+id/horizontalConstraint1"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="93dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ribbon" />
+
+        <LinearLayout
+            android:layout_width="229dp"
+            android:layout_height="100dp"
+            android:layout_gravity="end">
+
+
+            <TextView
+                android:id="@+id/textWelcomeUser"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Words of Hope"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text='"Take a deep breath, read slowly, and carry this light with you today."'
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/verticalConstraint1"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <ImageView
+        android:id="@+id/currentImage"
+        android:layout_width="270dp"
+        android:layout_height="316dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        android:src="@drawable/inspirational_image"
+        app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+        app:layout_constraintStart_toStartOf="@+id/verticalConstraint1"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+        app:layout_constraintStart_toStartOf="@+id/verticalConstraint1"
+        app:layout_constraintTop_toBottomOf="@+id/currentImage">
+
+        <ImageView
+            android:id="@+id/arrowLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="180"
+            android:src="@drawable/arrow"
+            app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+            app:layout_constraintStart_toStartOf="@+id/verticalConstraint1" />
+
+        <ImageView
+            android:id="@+id/heart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/heart_circle"
+            app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+            app:layout_constraintStart_toStartOf="@+id/verticalConstraint1" />
+
+        <ImageView
+            android:id="@+id/arrowRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow"
+            app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
+            app:layout_constraintStart_toStartOf="@+id/verticalConstraint1" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

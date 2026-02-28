@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
+    android:overScrollMode="always"
+    android:isScrollContainer="true"
+    android:clipToPadding="false"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:background="@color/background_light"
+    tools:context=".ui.videos.VideosFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- side guidelines for centering -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalConstraint1"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalConstraint2"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- HEADER -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+            app:layout_constraintWidth_max="900dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="#F4FCD9"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/video"
+                    android:contentDescription="@string/cd_video_header" />
+
+                <TextView
+                    android:id="@+id/textWelcomeUser"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/videos_header"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/videos_caption"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+            app:layout_constraintTop_toBottomOf="@id/cardView"
+            app:layout_constraintWidth_max="900dp" />
+
+        <!-- Video card helper 1 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardContent1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="#F4FCD9"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+            app:layout_constraintTop_toBottomOf="@id/textView1"
+            app:layout_constraintWidth_max="900dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+                <!-- 16:9 preview scaled down by percent width -->
+                <FrameLayout
+                    android:id="@+id/preview1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.72"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintDimensionRatio="16:9">
+
+                    <ImageView
+                        android:id="@+id/imageView12"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/video_one"
+                        android:contentDescription="@string/cd_video_thumb_1" />
+
+                    <ImageView
+                        android:id="@+id/youtubeIcon1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/youtube"
+                        android:contentDescription="@string/cd_video_play" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/videos_card1_title"
+                    app:layout_constraintTop_toBottomOf="@id/preview1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Video card helper 2 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card2Content1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="#FFDAB8"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+            app:layout_constraintTop_toBottomOf="@id/cardContent1"
+            app:layout_constraintWidth_max="900dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+                <FrameLayout
+                    android:id="@+id/preview2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.72"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintDimensionRatio="16:9">
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/video_two"
+                        android:contentDescription="@string/cd_video_thumb_2" />
+
+                    <ImageView
+                        android:id="@+id/youtubeIcon2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/youtube"
+                        android:contentDescription="@string/cd_video_play" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textCard2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/videos_card2_title"
+                    app:layout_constraintTop_toBottomOf="@id/preview2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Video card helper 3 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card3Content1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="#FFE1E1"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+            app:layout_constraintTop_toBottomOf="@id/card2Content1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_max="900dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+                <FrameLayout
+                    android:id="@+id/preview3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.72"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintDimensionRatio="16:9">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/video_three"
+                        android:contentDescription="@string/cd_video_thumb_3" />
+
+                    <ImageView
+                        android:id="@+id/youtubeIcon3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/youtube"
+                        android:contentDescription="@string/cd_video_play" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textCard3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/videos_card3_title"
+                    app:layout_constraintTop_toBottomOf="@id/preview3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

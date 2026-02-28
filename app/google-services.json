@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "412233000186",
+    "firebase_url": "https://mindjar-503bc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "mindjar-503bc",
+    "storage_bucket": "mindjar-503bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412233000186:android:040989d70e94f723651543",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyMvbPYm9DbDDcK4mqVfQskriz3CtHtco"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
