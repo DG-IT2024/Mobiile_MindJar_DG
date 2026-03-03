@@ -1,38 +1,60 @@
 package com.example.myapplication.data.repository;
 
-import android.content.Context;
-
-import com.example.myapplication.data.local.AppDatabase;
-import com.example.myapplication.data.local.dao.UserDao;
-import com.example.myapplication.data.local.entity.UserEntity;
-
-import org.mindrot.jbcrypt.BCrypt;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class AuthRepository {
 
-    private final UserDao userDao;
-
-    public AuthRepository(Context context) {
-        this.userDao = AppDatabase.getInstance(context).userDao();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    /**
+     * Creates a new user with email + password via Firebase Auth.
+     * On success, also sets the display name using updateProfile().
+     */
+    public void createUser(String fullName, String email,
+                           String password, AuthCallback callback) {
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            UserProfileChangeRequest req =
+                                    new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(fullName)
+                                            .build();
+                            user.updateProfile(req);
+                        }
+                        callback.onSuccess();
+                    } else {
+                        String msg = task.getException() != null
+                                ? task.getException().getMessage()
+                                : "Registration failed";
+                        callback.onError(msg);
+                    }
+                });
     }
 
-    public boolean emailExists(String email) {
-        return userDao.countByEmail(email) > 0;
+    /**
+     * Signs in an existing user with email + password.
+     */
+    public void login(String email, String password,
+                      AuthCallback callback) {
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        String msg = task.getException() != null
+                                ? task.getException().getMessage()
+                                : "Login failed";
+                        callback.onError(msg);
+                    }
+                });
     }
 
-    public long createUser(String fullName, String email, String rawPassword) {
-        // BCrypt will generate salt internally when using gensalt()
-        String hash = BCrypt.hashpw(rawPassword, BCrypt.gensalt(12));
-        UserEntity user = new UserEntity(fullName, email, hash, System.currentTimeMillis());
-        return userDao.insert(user);
-    }
-
-    public UserEntity getUserByEmail(String email) {
-        return userDao.findByEmail(email);
-    }
-
-    public boolean verifyPassword(String rawPassword, String storedHash) {
-        // storedHash includes salt + cost
-        return BCrypt.checkpw(rawPassword, storedHash);
+    /** Callback interface for async Firebase Auth operations. */
+    public interface AuthCallback {
+        void onSuccess();
+        void onError(String errorMessage);
     }
 }

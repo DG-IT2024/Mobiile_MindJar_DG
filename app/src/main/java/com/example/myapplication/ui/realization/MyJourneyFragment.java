@@ -90,26 +90,25 @@ public class MyJourneyFragment extends Fragment {
 
     private void loadEntries() {
         SessionManager session = new SessionManager(requireContext());
-        long userId = session.getLoggedInUserId();
+        String userId = session.getLoggedInUserId(); // CHANGE: was long
 
-        // If there is no logged-in user, show nothing (or you can show a message)
-        if (userId <= 0) return;
+        if (userId == null) return;
 
         JournalRepository repo = new JournalRepository(requireContext());
 
         AppExecutors.db().execute(() -> {
             List<JournalEntryEntity> entries = repo.listEntries(userId);
-
-            // Update UI on main thread
             if (isAdded()) {
-                requireActivity().runOnUiThread(() -> adapter.submitList(entries));
+                requireActivity().runOnUiThread(() ->
+                        adapter.submitList(entries));
             }
         });
     }
 
+
     private void openEntryDetails(@NonNull JournalEntryEntity entry) {
         Bundle args = new Bundle();
-        args.putLong("entryId", entry.entryId);
+        args.putString("entryId", entry.entryId);
 
         Navigation.findNavController(requireView())
                 .navigate(R.id.entryDetailsFragment, args);

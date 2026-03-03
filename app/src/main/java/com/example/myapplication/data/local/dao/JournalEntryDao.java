@@ -15,8 +15,9 @@ public interface JournalEntryDao {
     @Insert
     long insert(JournalEntryEntity entry);
 
-    @Query("SELECT * FROM journal_entries WHERE userId = :userId ORDER BY createdAtEpochMs DESC")
-    List<JournalEntryEntity> listForUser(long userId);
+    @Query("SELECT * FROM journal_entries WHERE userId = :userId" +
+            " ORDER BY createdAtEpochMs DESC")
+    List<JournalEntryEntity> getEntriesByUser(String userId);
 
     @Query("SELECT * FROM journal_entries WHERE entryId = :entryId LIMIT 1")
     JournalEntryEntity findById(long entryId);

@@ -14,22 +14,20 @@ import androidx.room.PrimaryKey;
 public class JournalEntryEntity {
 
     @PrimaryKey(autoGenerate = true)
-    public long entryId;
+    public String entryId;
 
-    public long userId;
+    public String userId;
 
     public String emotion; // e.g., "happy", "sad", etc.
-    public String text;
-
-    public boolean isPinned;
-
+    public String description;
     public long createdAtEpochMs;
 
-    public JournalEntryEntity(long userId, String emotion, String text, boolean isPinned, long createdAtEpochMs) {
+    public JournalEntryEntity(String userId, String emotion,
+                              String description, long createdAtEpochMs) {
         this.userId = userId;
         this.emotion = emotion;
-        this.text = text;
-        this.isPinned = isPinned;
+        this.description = description;
         this.createdAtEpochMs = createdAtEpochMs;
     }
+
 }

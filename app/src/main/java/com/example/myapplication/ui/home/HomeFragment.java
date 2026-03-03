@@ -238,19 +238,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void persistHomeEntry(String selectedEmotion, String description) {
         JournalRepository repo = new JournalRepository(requireContext());
         SessionManager session = new SessionManager(requireContext());
-        long userId = session.getLoggedInUserId();
 
-        if (userId <= 0) {
-            Toast.makeText(requireContext(), "Please log in again.", Toast.LENGTH_LONG).show();
+        String userId = session.getLoggedInUserId(); // CHANGE: was long, now String
+
+        if (userId == null) {
+            Toast.makeText(requireContext(),
+                    "Please log in again.", Toast.LENGTH_LONG).show();
             return;
         }
 
         AppExecutors.db().execute(() -> {
             repo.addEntry(userId, selectedEmotion, description);
             requireActivity().runOnUiThread(() ->
-                    Toast.makeText(requireContext(), "Submitted successfully!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(),
+                            "Submitted successfully!", Toast.LENGTH_LONG).show()
             );
         });
     }
+
 
 }
