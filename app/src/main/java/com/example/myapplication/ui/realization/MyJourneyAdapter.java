@@ -46,7 +46,7 @@ public class MyJourneyAdapter extends RecyclerView.Adapter<MyJourneyAdapter.Entr
         JournalEntryEntity entry = entries.get(position);
 
         holder.txtEmotion.setText(entry.emotion);
-        holder.txtPreview.setText(entry.text);
+        holder.txtPreview.setText(entry.description);
 
         holder.itemView.setOnClickListener(v -> listener.onClick(entry));
     }

@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
 public class JournalEntryEntity {
 
     @PrimaryKey(autoGenerate = true)
-    public String entryId;
+    public long entryId;
 
     public String userId;
 

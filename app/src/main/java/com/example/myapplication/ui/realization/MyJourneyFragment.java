@@ -108,7 +108,7 @@ public class MyJourneyFragment extends Fragment {
 
     private void openEntryDetails(@NonNull JournalEntryEntity entry) {
         Bundle args = new Bundle();
-        args.putString("entryId", entry.entryId);
+        long entryId = getArguments().getLong("entryId");
 
         Navigation.findNavController(requireView())
                 .navigate(R.id.entryDetailsFragment, args);
