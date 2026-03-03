@@ -28,11 +28,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.ui.Dashboard;
 import com.example.myapplication.R;
-import com.example.myapplication.data.*;
-import com.example.myapplication.data.local.*;
-import com.example.myapplication.data.repository.*;
 
-import com.example.myapplication.data.local.entity.UserEntity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -211,7 +207,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             return;
         }
 
-        // Real DB-backed credential check (Room)
+        // Firebase Auth credential check
         tryLogin(email, password);
     }
 

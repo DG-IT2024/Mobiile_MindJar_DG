@@ -10,8 +10,8 @@ import com.example.myapplication.data.local.dao.*;
 import com.example.myapplication.data.local.entity.*;
 
 @Database(
-        entities = {UserEntity.class, JournalEntryEntity.class,VideoEntity.class},
-        version = 3,
+        entities = {JournalEntryEntity.class,VideoEntity.class},
+        version = 4,
         exportSchema = true
 )
 
@@ -21,7 +21,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
 
-    // DAO accessors (Room generates implementations)
     public abstract JournalEntryDao journalEntryDao();
     public abstract VideoDao videoDao();
 
