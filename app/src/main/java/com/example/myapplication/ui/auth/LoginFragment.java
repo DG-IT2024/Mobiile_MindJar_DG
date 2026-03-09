@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.auth;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,9 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,13 +33,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.myapplication.ui.Dashboard;
 import com.example.myapplication.R;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import com.example.myapplication.data.repository.AuthRepository;
-
-
-
 
 /**
  * LoginFragment handles the Login UI and validation logic.
@@ -58,6 +65,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     // --- Controls ---
     private Button btnLogin;
     private CheckBox checkShowPassword; // used as show/hide toggle
+
+    // Google Auth
+    private ImageView iconGoogle;
+
+    private GoogleSignInClient googleSignInClient;
+
+    private AuthRepository repo = new AuthRepository();
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -83,6 +98,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         setupLiveValidation();
         setupSignUpLink(view);
 
+        //Google Auth
+        iconGoogle = view.findViewById(R.id.iconGoogle);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
+
         // SessionManager session = new SessionManager(requireContext());
         // if (session.getLoggedInUserId() > 0) {
         //     openDashboard();
@@ -104,7 +128,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         // NOTE: Your checkbox id is "checkBox" in XML.
         checkShowPassword = root.findViewById(R.id.checkBox);
+
+        //Google Auth
+        iconGoogle = root.findViewById(R.id.iconGoogle);
     }
+
+
+
+
 
     /**
      * Sets up click listeners for Login button and password toggle checkbox.
@@ -298,6 +329,37 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+    private final ActivityResultLauncher<Intent> googleSignInLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Task<GoogleSignInAccount> task =
+                            GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                    try {
+                        GoogleSignInAccount account = task.getResult(ApiException.class);
+                        if (account != null && account.getIdToken() != null) {
+                            repo.loginWithGoogleIdToken(account.getIdToken(), new AuthRepository.AuthCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    openDashboard();
+                                    requireActivity().finish();
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(requireContext(), "Google token is null", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (ApiException e) {
+                        Toast.makeText(requireContext(),
+                                "Google Sign-In failed: " + e.getStatusCode(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
 
 }

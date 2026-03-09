@@ -65,6 +65,10 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
 
+
+    //google authentication
+    implementation("com.google.android.gms:play-services-auth:21.5.1")
+
     //Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

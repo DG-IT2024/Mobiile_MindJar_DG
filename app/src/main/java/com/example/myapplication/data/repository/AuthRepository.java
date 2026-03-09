@@ -1,7 +1,9 @@
 package com.example.myapplication.data.repository;
 
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class AuthRepository {
@@ -57,4 +59,21 @@ public class AuthRepository {
         void onSuccess();
         void onError(String errorMessage);
     }
+
+    /** Google Authentication */
+    public void loginWithGoogleIdToken(String idToken, AuthCallback callback) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        String msg = task.getException() != null
+                                ? task.getException().getMessage()
+                                : "Google sign-in failed";
+                        callback.onError(msg);
+                    }
+                });
+    }
+
 }
