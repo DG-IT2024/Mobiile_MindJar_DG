@@ -11,111 +11,124 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * HopeFragment displays a simple carousel of inspirational images.
- *
- * The user can navigate through images using left and right arrows.
- * The heart icon provides feedback when the user "likes" the current image.
+ * HopeFragment — online-first version.
+ * Images are loaded live from Firebase Storage via URL.
+ * No local drawables are used. Glide handles image fetching and caching.
  */
 public class HopeFragment extends Fragment {
 
-    // UI elements displayed in the fragment layout.
     private ImageView imageCurrent;
     private ImageView arrowLeft;
     private ImageView arrowRight;
     private ImageView heartIcon;
 
-    // Tracks which image is currently shown in the carousel.
+    // Index of the currently displayed image.
     private int currentIndex = 0;
 
-    // List of inspirational images stored in the drawable folder.
-    private final int[] hopeImages = {
-            R.drawable.inspirational_image,
-            R.drawable.hope2,
-            R.drawable.hope3,
-            R.drawable.hope4
-    };
+    // Live list of image URLs from Firebase — updated in real time.
+    private List<String> imageUrls = new ArrayList<>();
 
-    /**
-     * Required empty public constructor.
-     * The Android system uses this when recreating the fragment.
-     */
-    public HopeFragment() {
-        // No initialization is needed here.
-    }
+    private HopeViewModel viewModel;
+
+    public HopeFragment() {}
 
     @SuppressLint("MissingInflatedId")
     @Override
     public @NonNull View onCreateView(
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(R.layout.fragment_hope, container, false);
+            @Nullable Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_hope, container, false);
         bindViews(view);
         setupClickListeners();
-
-        // Show the first image as soon as the fragment is displayed.
-        showCurrentImage();
-
+        setupViewModel();
         return view;
     }
 
-    /**
-     * Finds and assigns the views from the fragment layout.
-     */
+    /** Finds all view references from the layout. */
     private void bindViews(@NonNull View view) {
-        arrowLeft = view.findViewById(R.id.arrowLeft);
-        arrowRight = view.findViewById(R.id.arrowRight);
+        arrowLeft    = view.findViewById(R.id.arrowLeft);
+        arrowRight   = view.findViewById(R.id.arrowRight);
         imageCurrent = view.findViewById(R.id.currentImage);
-        heartIcon = view.findViewById(R.id.heart);
+        heartIcon    = view.findViewById(R.id.heart);
     }
 
-    /**
-     * Sets up click listeners for navigation arrows and the heart icon.
-     */
+    /** Wires up arrow and heart click listeners (unchanged from original). */
     private void setupClickListeners() {
         arrowRight.setOnClickListener(v -> showNextImage());
         arrowLeft.setOnClickListener(v -> showPreviousImage());
-
         heartIcon.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "You like this image.", Toast.LENGTH_SHORT).show()
-        );
+                Toast.makeText(requireContext(), "You like this image.", Toast.LENGTH_SHORT).show());
     }
 
     /**
-     * Moves to the next image in the list and updates the UI.
-     * When the end is reached, it loops back to the first image.
+     * Connects to HopeViewModel and observes the image URL list.
+     * Whenever Firebase returns updated data, the list is refreshed and
+     * the currently displayed image reloads automatically.
      */
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(HopeViewModel.class);
+
+        // Observe the URL list from Firebase.
+        viewModel.getImageUrls().observe(getViewLifecycleOwner(), urls -> {
+            if (urls != null && !urls.isEmpty()) {
+                imageUrls = urls;
+                // Reset to first image whenever the list refreshes.
+                currentIndex = 0;
+                showCurrentImage();
+            }
+        });
+
+        // Observe errors and show a Toast if Firebase fetch fails.
+        viewModel.getError().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(requireContext(),
+                        "Could not load images: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void showNextImage() {
-        currentIndex = (currentIndex + 1) % hopeImages.length;
+        if (imageUrls.isEmpty()) return;
+        currentIndex = (currentIndex + 1) % imageUrls.size();
         showCurrentImage();
     }
 
-    /**
-     * Moves to the previous image in the list and updates the UI.
-     * When the start is reached, it loops to the last image.
-     */
     private void showPreviousImage() {
-        currentIndex = (currentIndex - 1 + hopeImages.length) % hopeImages.length;
+        if (imageUrls.isEmpty()) return;
+        currentIndex = (currentIndex - 1 + imageUrls.size()) % imageUrls.size();
         showCurrentImage();
     }
 
     /**
-     * Updates the ImageView to display the current image with a short fade animation.
+     * Loads the current URL into the ImageView using Glide.
+     * Glide handles the network fetch, disk cache, and placeholder display.
+     * The fade animation is preserved from the original implementation.
      */
     private void showCurrentImage() {
-        if (imageCurrent == null || hopeImages.length == 0) {
-            return;
-        }
+        if (imageCurrent == null || imageUrls.isEmpty()) return;
 
-        // This creates a simple fade-out then fade-in effect.
+        String url = imageUrls.get(currentIndex);
+
+        // Fade animation — same as original.
         imageCurrent.setAlpha(0f);
-        imageCurrent.setImageResource(hopeImages[currentIndex]);
         imageCurrent.animate().alpha(1f).setDuration(300).start();
+
+        // Use Glide to load the remote image URL.
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.inspirational_image)  // shown while loading
+                .error(R.drawable.inspirational_image)         // shown if load fails
+                .into(imageCurrent);
     }
 }

@@ -64,10 +64,14 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
-
+    implementation("com.google.firebase:firebase-storage")
 
     //google authentication
     implementation("com.google.android.gms:play-services-auth:21.5.1")
+
+    // Glide — loads remote images into ImageView with caching
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
     //Test
     testImplementation(libs.junit)
