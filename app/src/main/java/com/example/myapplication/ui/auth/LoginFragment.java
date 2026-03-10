@@ -132,11 +132,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         //Google Auth
         iconGoogle = root.findViewById(R.id.iconGoogle);
     }
-
-
-
-
-
     /**
      * Sets up click listeners for Login button and password toggle checkbox.
      */
@@ -148,6 +143,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     (buttonView, isChecked) -> togglePasswordVisibility(isChecked)
             );
 
+        }
+
+        if (iconGoogle != null) {
+            iconGoogle.setOnClickListener(v -> {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                googleSignInLauncher.launch(signInIntent);
+            });
         }
     }
 
