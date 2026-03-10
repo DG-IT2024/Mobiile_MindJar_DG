@@ -71,7 +71,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private GoogleSignInClient googleSignInClient;
 
-    private AuthRepository repo = new AuthRepository();
+    private final AuthRepository repo = new AuthRepository();
 
 
     public LoginFragment() {
@@ -94,6 +94,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         bindViews(view);
+        setupGoogleAuth();
         setupListeners();
         setupLiveValidation();
         setupSignUpLink(view);
@@ -132,6 +133,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         //Google Auth
         iconGoogle = root.findViewById(R.id.iconGoogle);
     }
+
+    private void setupGoogleAuth() {
+        String webClientId = getString(R.string.default_web_client_id);
+        if (webClientId == null || webClientId.trim().isEmpty()) {
+            Toast.makeText(requireContext(), "Google auth is not configured", Toast.LENGTH_LONG).show();
+            googleSignInClient = null;
+            return;
+        }
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(webClientId)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
+    }
+
     /**
      * Sets up click listeners for Login button and password toggle checkbox.
      */
@@ -312,7 +330,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void tryLogin(String email, String password) {
-        AuthRepository repo = new AuthRepository();
 
         repo.login(email, password, new AuthRepository.AuthCallback() {
 
@@ -339,8 +356,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             GoogleSignIn.getSignedInAccountFromIntent(result.getData());
                     try {
                         GoogleSignInAccount account = task.getResult(ApiException.class);
-                        if (account != null && account.getIdToken() != null) {
-                            repo.loginWithGoogleIdToken(account.getIdToken(), new AuthRepository.AuthCallback() {
+                        String idToken = account != null ? account.getIdToken() : null;
+                        if (idToken != null && !idToken.isEmpty()) {
+                            repo.loginWithGoogleIdToken(idToken, new AuthRepository.AuthCallback() {
                                 @Override
                                 public void onSuccess() {
                                     openDashboard();
@@ -360,6 +378,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 "Google Sign-In failed: " + e.getStatusCode(),
                                 Toast.LENGTH_LONG).show();
                     }
+                }else {
+                    Toast.makeText(requireContext(), "Google Sign-In cancelled", Toast.LENGTH_SHORT).show();
                 }
             });
 
