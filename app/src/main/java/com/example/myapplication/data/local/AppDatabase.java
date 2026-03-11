@@ -10,8 +10,8 @@ import com.example.myapplication.data.local.dao.*;
 import com.example.myapplication.data.local.entity.*;
 
 @Database(
-        entities = {JournalEntryEntity.class,VideoEntity.class},
-        version = 5,
+        entities = {JournalEntryEntity.class, VideoEntity.class, HotlineEntity.class},
+        version = 7,
         exportSchema = true
 )
 
@@ -23,6 +23,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract JournalEntryDao journalEntryDao();
     public abstract VideoDao videoDao();
+    public abstract HotlineDao hotlineDao();
 
     // Singleton DB instance
     public static AppDatabase getInstance(Context context) {
