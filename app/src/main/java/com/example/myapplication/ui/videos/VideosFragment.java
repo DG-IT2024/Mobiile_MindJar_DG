@@ -17,7 +17,6 @@ import com.example.myapplication.R;
 /**
  * VideosFragment displays a dynamic list of YouTube videos loaded from
  * Firebase Realtime Database and cached locally in Room.
- *
  * Offline-first: Room cache is served immediately on load.
  * Firebase refreshes the list in the background whenever the device is online.
  * Tapping a card opens the video in the YouTube app (or browser fallback).
@@ -26,6 +25,8 @@ public class VideosFragment extends Fragment {
 
     private VideoViewModel viewModel;
     private VideoAdapter   adapter;
+    private View emptyState;
+    private RecyclerView recycler;
 
     /**
      * Required empty public constructor.
@@ -46,13 +47,14 @@ public class VideosFragment extends Fragment {
 
         setupRecyclerView(view);
         setupViewModel();
+        emptyState = view.findViewById(R.id.emptyState);
     }
 
     /**
      * Finds the RecyclerView and attaches the adapter.
      */
     private void setupRecyclerView(@NonNull View view) {
-        RecyclerView recycler = view.findViewById(R.id.recyclerVideos);
+        recycler = view.findViewById(R.id.recyclerVideos);
         adapter = new VideoAdapter();
         recycler.setAdapter(adapter);
     }
@@ -67,6 +69,10 @@ public class VideosFragment extends Fragment {
 
         viewModel.getVideos().observe(getViewLifecycleOwner(), videos -> {
             if (videos != null) adapter.submitList(videos);
+
+            boolean isEmpty = videos == null || videos.isEmpty();
+            recycler.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+            emptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         });
 
         viewModel.getError().observe(getViewLifecycleOwner(), msg -> {

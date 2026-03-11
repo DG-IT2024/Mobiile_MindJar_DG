@@ -91,5 +91,46 @@
             tools:itemCount="3"
             tools:listitem="@layout/item_video" />
 
+        <!-- Empty state — shown when cache is empty and Firebase is unreachable -->
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="48dp"
+            android:paddingBottom="48dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/cardView"
+            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/video"
+                android:alpha="0.4"
+                android:contentDescription="@string/cd_video_header" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="No videos available"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:alpha="0.6" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Check your connection and try again."
+                android:textSize="13sp"
+                android:alpha="0.5"
+                android:gravity="center" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
