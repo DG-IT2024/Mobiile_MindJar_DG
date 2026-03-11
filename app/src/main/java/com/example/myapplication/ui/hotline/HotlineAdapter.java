@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
@@ -18,14 +20,13 @@ import com.example.myapplication.data.local.entity.HotlineEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineViewHolder> {
 
-    private List<HotlineEntity> items = new ArrayList<>();
+public class HotlineAdapter extends ListAdapter<HotlineEntity, HotlineAdapter.HotlineViewHolder> {
 
-    public void submitList(List<HotlineEntity> newItems) {
-        this.items = newItems;
-        notifyDataSetChanged();
+    public HotlineAdapter() {
+        super(DIFF_CALLBACK);
     }
+
 
     @NonNull @Override
     public HotlineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +37,7 @@ public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineV
 
     @Override
     public void onBindViewHolder(@NonNull HotlineViewHolder holder, int position) {
-        HotlineEntity item = items.get(position);
+        HotlineEntity item = getItem(position);
         holder.tvName.setText(item.name);
         holder.tvPhone.setText(item.phone);
 
@@ -73,7 +74,7 @@ public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineV
         });
     }
 
-    @Override public int getItemCount() { return items.size(); }
+    @Override public int getItemCount() { return super.getItemCount(); }
 
     static class HotlineViewHolder extends RecyclerView.ViewHolder {
         TextView  tvName, tvPhone;
@@ -87,4 +88,31 @@ public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineV
             ivFacebook = itemView.findViewById(R.id.ivHotlineFacebook);
         }
     }
+
+    private static final DiffUtil.ItemCallback<HotlineEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<HotlineEntity>() {
+
+                @Override
+                public boolean areItemsTheSame(
+                        @NonNull HotlineEntity oldItem,
+                        @NonNull HotlineEntity newItem) {
+                    // Two items represent the same hotline if their phone number matches
+                    return oldItem.phone.equals(newItem.phone);
+                }
+
+                @Override
+                public boolean areContentsTheSame(
+                        @NonNull HotlineEntity oldItem,
+                        @NonNull HotlineEntity newItem) {
+                    // Hotline content is identical if all visible fields match
+                    return oldItem.phone.equals(newItem.phone)
+                            && oldItem.name.equals(newItem.name)
+                            && oldItem.email.equals(newItem.email)
+                            && oldItem.facebookUrl.equals(newItem.facebookUrl)
+                            && oldItem.order == newItem.order;
+                }
+            };
+
+
+
 }

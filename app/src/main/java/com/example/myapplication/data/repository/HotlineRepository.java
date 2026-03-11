@@ -29,6 +29,8 @@ public class HotlineRepository {
     private final MutableLiveData<List<HotlineEntity>> hotlines = new MutableLiveData<>();
     private final MutableLiveData<String> error = new MutableLiveData<>();
 
+    private ValueEventListener hotlineListener;
+
     public HotlineRepository(Context context) {
         dao        = AppDatabase.getInstance(context).hotlineDao();
         hotlineRef = FirebaseDatabase.getInstance().getReference("hotlines");
@@ -45,7 +47,7 @@ public class HotlineRepository {
         });
 
         // 2. Fetch fresh data from Firebase in background
-        hotlineRef.addValueEventListener(new ValueEventListener() {
+        hotlineListener = new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 List<HotlineEntry> entries = new ArrayList<>();
@@ -57,7 +59,7 @@ public class HotlineRepository {
                 }
                 entries.sort(Comparator.comparingInt(e -> e.order));
 
-                AppExecutors.getInstance().diskIO().execute(() -> {
+                AppExecutors.db().execute(() -> {
                     // Refresh cache
                     dao.deleteAll();
                     for (HotlineEntry e : entries) {
@@ -78,9 +80,22 @@ public class HotlineRepository {
             public void onCancelled(DatabaseError dbError) {
                 error.postValue(dbError.getMessage());
             }
-        });
-    }
+        };
+        hotlineRef.addValueEventListener(hotlineListener);
 
+    }
     public LiveData<List<HotlineEntity>> getHotlines() { return hotlines; }
     public LiveData<String> getError() { return error; }
+
+    /**
+     * Removes the Firebase listener to prevent memory leaks.
+     * Call this from HotlineViewModel.onCleared().
+     */
+    public void detachListener() {
+        if (hotlineListener != null) {
+            hotlineRef.removeEventListener(hotlineListener);
+            hotlineListener = null;
+        }
+    }
+
 }

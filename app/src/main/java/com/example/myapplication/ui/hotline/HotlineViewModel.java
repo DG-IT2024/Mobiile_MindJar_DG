@@ -26,4 +26,11 @@ public class HotlineViewModel extends AndroidViewModel {
     public LiveData<String> getError() {
         return repository.getError();
     }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        repository.detachListener();
+    }
+
 }
