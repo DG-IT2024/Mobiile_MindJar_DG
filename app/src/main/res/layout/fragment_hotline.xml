@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Guidelines -->
+        <!-- Side rails -->
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalConstraint1"
             android:layout_width="wrap_content"
@@ -75,6 +75,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Caption -->
         <TextView
             android:id="@+id/textView1"
             android:layout_width="0dp"
@@ -88,6 +89,7 @@
             app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
             app:layout_constraintEnd_toStartOf="@id/verticalConstraint2" />
 
+        <!-- Dynamic hotline list -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHotlines"
             android:layout_width="0dp"

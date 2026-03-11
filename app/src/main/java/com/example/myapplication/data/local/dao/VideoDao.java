@@ -15,15 +15,15 @@ import java.util.List;
 @Dao
 public interface VideoDao {
 
-    /** Insert or update a video from Firebase. */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void upsert(VideoEntity video);
 
-    /** Get all cached videos ordered by their display order. */
     @Query("SELECT * FROM videos ORDER BY `order` ASC")
     List<VideoEntity> getAllVideos();
 
-    /** Check how many videos are cached (used to detect empty cache). */
     @Query("SELECT COUNT(*) FROM videos")
     int getCount();
+
+    @Query("DELETE FROM videos")   // NEW
+    void deleteAll();
 }

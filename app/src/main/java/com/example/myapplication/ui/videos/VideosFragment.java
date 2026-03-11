@@ -1,122 +1,79 @@
 package com.example.myapplication.ui.videos;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 
 /**
- * VideosFragment provides quick access to inspirational YouTube videos.
+ * VideosFragment displays a dynamic list of YouTube videos loaded from
+ * Firebase Realtime Database and cached locally in Room.
  *
- * Tapping a video icon attempts to open the link in the YouTube app.
- * If the YouTube app is not available, the link is opened in a web browser.
+ * Offline-first: Room cache is served immediately on load.
+ * Firebase refreshes the list in the background whenever the device is online.
+ * Tapping a card opens the video in the YouTube app (or browser fallback).
  */
-public class VideosFragment extends Fragment implements View.OnClickListener {
+public class VideosFragment extends Fragment {
 
-    // YouTube video icons displayed in the fragment layout.
-    private ImageView youtubeIcon1;
-    private ImageView youtubeIcon2;
-    private ImageView youtubeIcon3;
+    private VideoViewModel viewModel;
+    private VideoAdapter   adapter;
 
     /**
      * Required empty public constructor.
-     * The Android system uses this constructor when recreating the fragment.
      */
-    public VideosFragment() {
-        // No initialization is needed here.
-    }
+    public VideosFragment() {}
 
-    @SuppressLint("MissingInflatedId")
     @Override
-    public @NonNull View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(R.layout.fragment_videos, container, false);
-
-        bindViews(view);
-        setClickListeners();
-
-        return view;
-    }
-
-    /**
-     * Finds and assigns the ImageView references from the fragment layout.
-     */
-    private void bindViews(@NonNull View view) {
-        youtubeIcon1 = view.findViewById(R.id.youtubeIcon1);
-        youtubeIcon2 = view.findViewById(R.id.youtubeIcon2);
-        youtubeIcon3 = view.findViewById(R.id.youtubeIcon3);
-    }
-
-    /**
-     * Sets click listeners for all YouTube video icons.
-     */
-    private void setClickListeners() {
-        youtubeIcon1.setOnClickListener(this);
-        youtubeIcon2.setOnClickListener(this);
-        youtubeIcon3.setOnClickListener(this);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_videos, container, false);
     }
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        if (id == R.id.youtubeIcon1) {
-            openYouTubeLink("https://www.youtube.com/watch?v=tX8TgVR33KM");
-
-        } else if (id == R.id.youtubeIcon2) {
-            openYouTubeLink("https://www.youtube.com/watch?v=1jz7msnmFLU");
-
-        } else if (id == R.id.youtubeIcon3) {
-            openYouTubeLink("https://www.youtube.com/watch?v=hXlFxceM4R8");
-
-        } else {
-            showToast("Unknown video selected.");
-        }
+        setupRecyclerView(view);
+        setupViewModel();
     }
 
     /**
-     * Opens a YouTube video using the YouTube app if available.
-     * If the app is not installed, the link is opened in a web browser.
+     * Finds the RecyclerView and attaches the adapter.
      */
-    private void openYouTubeLink(@NonNull String url) {
-        if (!isAdded()) {
-            return;
-        }
-
-        try {
-            // Attempt to open the link in the YouTube app.
-            Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            youtubeIntent.setPackage("com.google.android.youtube");
-            startActivity(youtubeIntent);
-
-        } catch (Exception e) {
-            // Fallback: open the link in the user's default web browser.
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(browserIntent);
-        }
+    private void setupRecyclerView(@NonNull View view) {
+        RecyclerView recycler = view.findViewById(R.id.recyclerVideos);
+        adapter = new VideoAdapter();
+        recycler.setAdapter(adapter);
     }
 
     /**
-     * Displays a short toast message safely using the fragment's context.
+     * Connects to VideoViewModel and observes LiveData.
+     * Videos are pushed to the adapter as soon as Room or Firebase returns data.
+     * Errors are surfaced as a short Toast — cached data stays visible.
      */
-    private void showToast(@NonNull String message) {
-        if (!isAdded()) {
-            return;
-        }
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(VideoViewModel.class);
+
+        viewModel.getVideos().observe(getViewLifecycleOwner(), videos -> {
+            if (videos != null) adapter.submitList(videos);
+        });
+
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
+            if (msg != null)
+                Toast.makeText(requireContext(),
+                        "Could not load videos: " + msg,
+                        Toast.LENGTH_SHORT).show();
+        });
     }
 }

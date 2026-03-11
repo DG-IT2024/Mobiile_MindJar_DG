@@ -11,7 +11,7 @@ import com.example.myapplication.data.local.entity.*;
 
 @Database(
         entities = {JournalEntryEntity.class, VideoEntity.class, HotlineEntity.class},
-        version = 7,
+        version = 8,
         exportSchema = true
 )
 

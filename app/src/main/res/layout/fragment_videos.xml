@@ -75,170 +75,21 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView1"
+        <!-- RecyclerView  -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerVideos"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/videos_caption"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:gravity="center"
+            android:paddingTop="12dp"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/cardView"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2" />
-
-        <!-- Video card helper 1 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#F4FCD9"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/textView1"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp">
-
-                    <ImageView
-                        android:id="@+id/imageView12"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/video_one"
-                        android:contentDescription="@string/cd_video_thumb_1"/>
-
-                    <ImageView
-                        android:id="@+id/youtubeIcon1"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/youtube"
-                        android:contentDescription="@string/cd_video_play"/>
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/videos_card1_title" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Video card helper 2 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card2Content1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#FFDAB8"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/cardContent1"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp">
-
-                    <ImageView
-                        android:id="@+id/imageView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/video_two"
-                        android:contentDescription="@string/cd_video_thumb_2"/>
-
-                    <ImageView
-                        android:id="@+id/youtubeIcon2"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/youtube"
-                        android:contentDescription="@string/cd_video_play"/>
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/textCard2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/videos_card2_title" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Video card helper 3 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card3Content1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#FFE1E1"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/card2Content1"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp">
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/video_three"
-                        android:contentDescription="@string/cd_video_thumb_3"/>
-
-                    <ImageView
-                        android:id="@+id/youtubeIcon3"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/youtube"
-                        android:contentDescription="@string/cd_video_play"/>
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/textCard3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/videos_card3_title" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_video" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

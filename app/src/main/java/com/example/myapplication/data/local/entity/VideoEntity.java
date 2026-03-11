@@ -14,21 +14,15 @@ public class VideoEntity {
     @PrimaryKey
     @NonNull
     public String videoId;
-
+    public String thumbnailUrl;
     public String title;
     public int order;
 
-    public VideoEntity(@NonNull String videoId, String title, int order) {
+    public VideoEntity(@NonNull String videoId, String title, String thumbnailUrl, int order) {
         this.videoId = videoId;
         this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
         this.order = order;
     }
 
-    /**
-     * Returns the full YouTube embed URL for use in a WebView iFrame.
-     * Example: https://www.youtube.com/embed/tX8TgVR33KM
-     */
-    public String getEmbedUrl() {
-        return "https://www.youtube.com/embed/" + videoId;
-    }
 }
