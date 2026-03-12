@@ -175,7 +175,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
 
         if (userFeelingText.isEmpty()) {
-            showToast("Please describe your feeling before submitting.");
+            showToast("Please describe your feeling before saving.");
             return;
         }
 
