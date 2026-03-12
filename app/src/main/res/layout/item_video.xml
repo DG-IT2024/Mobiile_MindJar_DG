@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
@@ -9,7 +10,8 @@
     android:layout_marginEnd="16dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/video_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,31 +19,41 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Thumbnail with play icon overlay -->
+        <!--
+            16:9 thumbnail container.
+            Using a ConstraintLayout as the DIRECT parent here so that
+            app:layout_constraintDimensionRatio is honoured correctly.
+        -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="16:9">
+            android:layout_height="wrap_content">
 
+            <!-- Thumbnail — constrained to 16:9 via ratio on itself -->
             <ImageView
                 android:id="@+id/videoThumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/video"
-                android:contentDescription="@string/cd_video_play" />
+                android:contentDescription="@string/cd_video_play"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintDimensionRatio="H,16:9" />
 
+            <!-- YouTube play icon overlay — centred over thumbnail -->
             <ImageView
                 android:id="@+id/youtubePlayIcon"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_gravity="center"
                 android:src="@drawable/youtube"
                 android:contentDescription="@string/cd_video_play"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Title -->
@@ -52,7 +64,7 @@
             android:gravity="center"
             android:layout_marginTop="8dp"
             android:textSize="14sp"
-            android:text="@string/videos_card1_title" />
+            tools:text="Video Title" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

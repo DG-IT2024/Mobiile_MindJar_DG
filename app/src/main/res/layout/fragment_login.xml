@@ -292,19 +292,6 @@
                 android:layout_margin="6dp"
                 android:src="@drawable/google" />
 
-            <ImageView
-                android:id="@+id/iconFacebook"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="6dp"
-                android:src="@drawable/facebook" />
-
-            <ImageView
-                android:id="@+id/iconTwitter"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="6dp"
-                android:src="@drawable/twitter_circle" />
         </LinearLayout>
     </LinearLayout>
 

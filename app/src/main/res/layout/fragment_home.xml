@@ -234,12 +234,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputFeeling"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minLines="4"
+                android:layout_height="168dp"
                 android:gravity="top|start"
-                android:inputType="textMultiLine"
                 android:hint="@string/home_feeling_hint"
-                 />
+                android:inputType="textMultiLine"
+                android:minLines="4" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -288,5 +287,8 @@
             app:layout_constraintTop_toTopOf="@id/button"
             app:layout_constraintBottom_toBottomOf="@id/button"
             app:layout_constraintEnd_toEndOf="@id/button" />
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

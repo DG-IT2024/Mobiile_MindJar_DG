@@ -127,8 +127,8 @@ public class HopeFragment extends Fragment {
         // Use Glide to load the remote image URL.
         Glide.with(this)
                 .load(url)
-                .placeholder(R.drawable.inspirational_image)  // shown while loading
-                .error(R.drawable.inspirational_image)         // shown if load fails
+                .placeholder(R.drawable.loading_image)  // shown while loading
+                .error(R.drawable.loading_image)         // shown if load fails
                 .into(imageCurrent);
     }
 }

@@ -101,7 +101,7 @@
             android:layout_marginTop="60dp"
             android:contentDescription="@string/cd_inspirational"
             android:scaleType="centerCrop"
-            android:src="@drawable/inspirational_image"
+            android:src="@drawable/loading_image"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

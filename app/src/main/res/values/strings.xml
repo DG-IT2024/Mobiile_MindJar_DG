@@ -60,9 +60,7 @@
     <!-- VIDEOS -->
     <string name="videos_header">Hope of Motion</string>
     <string name="videos_caption">"Take this time to focus on yourself—you deserve peace and healing."</string>
-    <string name="videos_card1_title">World Mental Health Day</string>
-    <string name="videos_card2_title">Mental Health Benefits of Running</string>
-    <string name="videos_card3_title">Emotional Well-Being</string>
+
 
     <!-- Content descriptions -->
     <string name="cd_handshake">Handshake illustration</string>
