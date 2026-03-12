@@ -84,8 +84,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Observe save result from ViewModel
         viewModel.getSaveStatus().observe(getViewLifecycleOwner(), status -> {
             if ("saved".equals(status)) {
-                showToast("Entry saved");
-                resetForm();
+                handleSubmissionSuccess();
             } else if ("error".equals(status)) {
                 showToast("Failed to save. Please try again.");
             }
@@ -203,12 +202,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     /**
      * Resets all emotion icon backgrounds to transparent so only one icon appears selected.
      */
-    private void resetIconBackgrounds() {
-        iconHappy.setBackgroundColor(Color.TRANSPARENT);
-        iconSad.setBackgroundColor(Color.TRANSPARENT);
-        iconPressured.setBackgroundColor(Color.TRANSPARENT);
-        iconAngry.setBackgroundColor(Color.TRANSPARENT);
-    }
+//    private void resetIconBackgrounds() {
+//        iconHappy.setBackgroundColor(Color.TRANSPARENT);
+//        iconSad.setBackgroundColor(Color.TRANSPARENT);
+//        iconPressured.setBackgroundColor(Color.TRANSPARENT);
+//        iconAngry.setBackgroundColor(Color.TRANSPARENT);
+//    }
 
     /**
      * Shows a confirmation dialog before final submission.
@@ -216,7 +215,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void showConfirmationDialog(@NonNull String feelingText) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Confirm Submission")
-                .setMessage("Are you sure you want to submit this feeling?\n\n" + feelingText)
+//                .setMessage("Are you sure you want to save this feeling?\n\n" + feelingText)
+                .setMessage("Are you sure you want to save this entry?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     persistHomeEntry(getEmotionString(selectedFeelingIconId), feelingText);
                 })
@@ -233,7 +233,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * This method currently shows a success message and resets the UI.
      */
     private void handleSubmissionSuccess() {
-        showToast("Submitted successfully!");
+        showToast("Entry Saved!");
         resetForm();
     }
 
@@ -242,7 +242,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      */
     private void resetForm() {
         selectedFeelingIconId = 0;
-        resetIconBackgrounds();
+        clearIconSelections();
 
         if (textFeeling != null) {
             textFeeling.setText("");
@@ -277,11 +277,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         viewModel.saveEntry(userId, selectedEmotion, description);
     }
 
-
-
-    // ─────────────────────────────────────────────────────────────────
     // Maps icon view ID → emotion string stored in Room/Firestore
-    // ─────────────────────────────────────────────────────────────────
+
     private String getEmotionString(int iconId) {
         if (iconId == R.id.happyIcon)     return "happy";
         if (iconId == R.id.sadIcon)       return "sad";

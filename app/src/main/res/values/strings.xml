@@ -27,7 +27,7 @@
     <string name="label_angry">Angry</string>
     <string name="home_add_your_feelings">Add your feelings to your MindJar</string>
     <string name="home_feeling_hint">I am feeling......</string>
-    <string name="home_send">Send</string>
+    <string name="home_send">Save</string>
 
     <!-- HOPE -->
     <string name="hope_header">Words of Hope</string>
