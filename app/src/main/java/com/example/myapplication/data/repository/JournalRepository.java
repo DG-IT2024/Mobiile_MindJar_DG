@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.myapplication.data.local.AppDatabase;
+import com.example.myapplication.data.local.AppExecutors;
 import com.example.myapplication.data.local.dao.JournalEntryDao;
 import com.example.myapplication.data.local.entity.JournalEntryEntity;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -79,8 +80,10 @@ public class JournalRepository {
                     // Entry is now safely backed up in Firestore.
                     // Flip the flag in Room so WorkManager skips it on next run.
                     entry.syncedToFirebase = true;
-                    dao.update(entry);
-                    Log.d(TAG, "Synced entry " + entry.firestoreId + " to Firestore");
+                    AppExecutors.db().execute(() -> {
+                        dao.update(entry);
+                        Log.d(TAG, "Synced entry " + entry.firestoreId + " to Firestore");
+                    });
                 })
                 .addOnFailureListener(e -> {
                     // Firestore write failed — no network, permission error, etc.

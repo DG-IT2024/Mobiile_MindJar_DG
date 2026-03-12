@@ -59,28 +59,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // No initialization is needed here.
     }
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // This fragment does not need special setup in onCreate().
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialise ViewModel via Factory (required because HomeViewModel
-        // takes Application as a constructor argument).
+        // Wire up all view references first — must happen before ViewModel setup
+        bindViews(view);
+        setClickListeners();
+
+        // Initialise ViewModel
         HomeViewModelFactory factory =
                 new HomeViewModelFactory(requireActivity().getApplication());
         viewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
 
-        // Observe save result. This lambda runs on the main thread automatically.
-        // getViewLifecycleOwner() ensures observation stops when the Fragment view
-        // is destroyed — preventing memory leaks.
+        // Observe save result from ViewModel
         viewModel.getSaveStatus().observe(getViewLifecycleOwner(), status -> {
             if ("saved".equals(status)) {
-                showToast("Entry saved!");
+                showToast("Entry saved");
                 resetForm();
             } else if ("error".equals(status)) {
                 showToast("Failed to save. Please try again.");
@@ -213,10 +217,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Confirm Submission")
                 .setMessage("Are you sure you want to submit this feeling?\n\n" + feelingText)
-                .setPositiveButton("Yes", (dialog, which) -> handleSubmissionSuccess())
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    persistHomeEntry(getEmotionString(selectedFeelingIconId), feelingText);
+                })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
+
+
+
 
     /**
      * Runs after the user confirms submission.
@@ -239,6 +249,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+
     /**
      * Displays a short toast message safely using the fragment's context.
      */
@@ -247,6 +259,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void persistHomeEntry(String selectedEmotion, String description) {
+
+        android.util.Log.d("HomeFragment", "persistHomeEntry called: emotion=" + selectedEmotion +
+                " userId=" + new SessionManager(requireContext()).getLoggedInUserId());
+
         SessionManager session = new SessionManager(requireContext());
         String userId = session.getLoggedInUserId();
 
@@ -260,6 +276,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // The ViewModel handles threading, UUID generation, Room insert, and Firestore push.
         viewModel.saveEntry(userId, selectedEmotion, description);
     }
+
+
+
+    // ─────────────────────────────────────────────────────────────────
+    // Maps icon view ID → emotion string stored in Room/Firestore
+    // ─────────────────────────────────────────────────────────────────
+    private String getEmotionString(int iconId) {
+        if (iconId == R.id.happyIcon)     return "happy";
+        if (iconId == R.id.sadIcon)       return "sad";
+        if (iconId == R.id.pressuredIcon) return "pressured";
+        if (iconId == R.id.angryIcon)     return "angry";
+        return "unknown";
+    }
+
 
 
 }

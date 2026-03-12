@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myapplication.data.local.AppExecutors;
 import com.example.myapplication.data.repository.JournalRepository;
 
+
 public class HomeViewModel extends AndroidViewModel {
 
     private final JournalRepository repo;
