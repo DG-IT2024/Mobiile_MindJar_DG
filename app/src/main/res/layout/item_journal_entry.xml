@@ -10,26 +10,49 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
+        <!-- LEFT — emotion icon/label -->
         <TextView
             android:id="@+id/txtEmotion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:gravity="center"
             android:textStyle="bold"
-            android:textSize="16sp"
+            android:textSize="13sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/circle_emotion_bg"
             android:text="Emotion" />
 
-        <TextView
-            android:id="@+id/txtPreview"
-            android:layout_width="match_parent"
+        <!-- RIGHT — date on top, description below -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:text="Entry preview..." />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:text="Mar 12, 2026 · 02:00 PM" />
+
+            <TextView
+                android:id="@+id/txtPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="20sp"
+                android:text="Entry preview..." />
+
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
-
-

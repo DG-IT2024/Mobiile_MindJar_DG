@@ -56,15 +56,13 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
 
-//    password hashing
-//    implementation("org.mindrot:jbcrypt:0.4")
-
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-firestore")
 
     //google authentication
     implementation("com.google.android.gms:play-services-auth:21.5.1")
@@ -75,6 +73,9 @@ dependencies {
 
     //RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    // WorkManager — background sync when connectivity is restored
+    implementation("androidx.work:work-runtime:2.9.0")
 
     //Test
     testImplementation(libs.junit)

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     // Color used to highlight the selected icon.
     private static final int SELECTED_BG_COLOR = Color.parseColor("#A5D6A7"); // light green
-
+    private HomeViewModel viewModel;
     /**
      * Required empty public constructor.
      * The Android system uses this when recreating the fragment.
@@ -65,18 +66,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public @NonNull View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        bindViews(view);
-        setClickListeners();
+        // Initialise ViewModel via Factory (required because HomeViewModel
+        // takes Application as a constructor argument).
+        HomeViewModelFactory factory =
+                new HomeViewModelFactory(requireActivity().getApplication());
+        viewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
 
-        return view;
+        // Observe save result. This lambda runs on the main thread automatically.
+        // getViewLifecycleOwner() ensures observation stops when the Fragment view
+        // is destroyed — preventing memory leaks.
+        viewModel.getSaveStatus().observe(getViewLifecycleOwner(), status -> {
+            if ("saved".equals(status)) {
+                showToast("Entry saved!");
+                resetForm();
+            } else if ("error".equals(status)) {
+                showToast("Failed to save. Please try again.");
+            }
+        });
     }
+
 
     /**
      * Finds and assigns the views from the fragment layout.
@@ -236,24 +247,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void persistHomeEntry(String selectedEmotion, String description) {
-        JournalRepository repo = new JournalRepository(requireContext());
         SessionManager session = new SessionManager(requireContext());
-
-        String userId = session.getLoggedInUserId(); // CHANGE: was long, now String
+        String userId = session.getLoggedInUserId();
 
         if (userId == null) {
-            Toast.makeText(requireContext(),
-                    "Please log in again.", Toast.LENGTH_LONG).show();
+            // This should not happen if MainActivity correctly guards the Dashboard,
+            // but it is good practice to handle it defensively.
+            showToast("Session expired. Please log in again.");
             return;
         }
-
-        AppExecutors.db().execute(() -> {
-            repo.addEntry(userId, selectedEmotion, description);
-            requireActivity().runOnUiThread(() ->
-                    Toast.makeText(requireContext(),
-                            "Submitted successfully!", Toast.LENGTH_LONG).show()
-            );
-        });
+        // Fragment -> ViewModel only. Repository is never touched directly from here.
+        // The ViewModel handles threading, UUID generation, Room insert, and Firestore push.
+        viewModel.saveEntry(userId, selectedEmotion, description);
     }
 
 

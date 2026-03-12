@@ -16,6 +16,15 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import com.example.myapplication.util.SyncJournalWorker;
+import java.util.concurrent.TimeUnit;
+
+
 /*
  * Dashboard Activity
  * - Hosts the NavHostFragment for nav_graph
@@ -71,6 +80,27 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         }
 
         applyTintForIcon(selectedIconId); //change icon color of the selected menu
+
+        // Constraint: only run when the device has any active network connection.
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        // Schedule the sync worker to run at most every 15 minutes (minimum WorkManager allows).
+        // In practice it may run less frequently — WorkManager batches work for battery efficiency.
+        PeriodicWorkRequest syncRequest =
+                new PeriodicWorkRequest.Builder(SyncJournalWorker.class, 15, TimeUnit.MINUTES)
+                        .setConstraints(constraints)
+                        .build();
+
+        // enqueueUniquePeriodicWork with KEEP = if 'sync_journal' is already scheduled,
+        // do not replace it. This prevents duplicate workers if onCreate() runs multiple times.
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "sync_journal",
+                ExistingPeriodicWorkPolicy.KEEP,
+                syncRequest
+        );
+
     }
 
     @Override
