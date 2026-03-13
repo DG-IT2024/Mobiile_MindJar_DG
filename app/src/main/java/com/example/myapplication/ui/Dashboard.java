@@ -147,12 +147,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
             // If we are on a deeper screen launched from Realization, keep Realization highlighted.
 //            if (destId == R.id.myJourneyFragment || destId == R.id.entryDetailsFragment) {
-            if (destId == R.id.entryDetailsFragment) {
-
+            if (destId == R.id.entryDetailsFragment
+                    || destId == R.id.editEntryFragment) {
                 selectedIconId = R.id.realizationIcon;
                 applyTintForIcon(selectedIconId);
                 return;
             }
+
 
             // Otherwise, map destination -> bottom icon.
             if (destId == R.id.homeFragment) {

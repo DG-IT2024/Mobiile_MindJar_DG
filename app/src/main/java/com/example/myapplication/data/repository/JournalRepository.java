@@ -9,6 +9,8 @@ import com.example.myapplication.data.local.dao.JournalEntryDao;
 import com.example.myapplication.data.local.entity.JournalEntryEntity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,15 +126,15 @@ public class JournalRepository {
     }
 
     // ─────────────────────────────────────────────────────────────────
-// RESTORE — pulls Firestore entries into Room on fresh install/login.
-// Called by RealizationViewModel.loadEntriesWithRestore().
-//
-// Flow:
-//   1. Query Firestore for all entries under this userId
-//   2. For each document, check if firestoreId already exists in Room
-//   3. Missing → insert into Room with syncedToFirebase = true
-//   4. Call onComplete so ViewModel can refresh the UI
-// ─────────────────────────────────────────────────────────────────
+    // RESTORE — pulls Firestore entries into Room on fresh install/login.
+    // Called by RealizationViewModel.loadEntriesWithRestore().
+    //
+    // Flow:
+    //   1. Query Firestore for all entries under this userId
+    //   2. For each document, check if firestoreId already exists in Room
+    //   3. Missing → insert into Room with syncedToFirebase = true
+    //   4. Call onComplete so ViewModel can refresh the UI
+    // ─────────────────────────────────────────────────────────────────
     public void restoreFromFirestore(String userId, Runnable onComplete) {
         FirebaseFirestore.getInstance()
                 .collection("journal_entries")
@@ -234,6 +236,29 @@ public class JournalRepository {
                         Log.d(TAG, "Deleted from Firestore: " + entry.firestoreId))
                 .addOnFailureListener(e ->
                         Log.w(TAG, "Firestore delete failed: " + e.getMessage()));
+    }
+    // ─────────────────────────────────────────────────────────────────
+    // UPDATE — called from EditEntryViewModel on a background thread.
+    // Mutates the entity in place, marks it unsynced, writes to Room,
+    // then overwrites the Firestore document via pushToFirestore().
+    // ─────────────────────────────────────────────────────────────────
+    public void updateEntry(@NonNull JournalEntryEntity entry,
+                            @NonNull String newEmotion,
+                            @NonNull String newDescription) {
+
+        entry.emotion          = newEmotion;
+        entry.description      = newDescription;
+        // Mark unsynced so WorkManager retries Firestore if offline.
+        entry.syncedToFirebase = false;
+
+        // Room update — synchronous, already on background thread.
+        dao.update(entry);
+        Log.d(TAG, "Updated entry in Room: " + entry.entryId);
+
+        // Firestore overwrite — fire-and-forget.
+        // .set() replaces the full document, so emotion and description
+        // are updated without needing a separate Firestore method.
+        pushToFirestore(entry);
     }
 
 

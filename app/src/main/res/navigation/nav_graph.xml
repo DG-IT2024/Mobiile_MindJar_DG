@@ -48,6 +48,17 @@
     <fragment
         android:id="@+id/entryDetailsFragment"
         android:name="com.example.myapplication.ui.realization.EntryDetailsFragment"
-        android:label="Entry Details" />
+        android:label="Entry Details"
+        />
+
+    <action
+        android:id="@+id/action_entryDetailsFragment_to_editEntryFragment"
+        app:destination="@id/editEntryFragment" />
+
+    <fragment
+        android:id="@+id/editEntryFragment"
+        android:name="com.example.myapplication.ui.realization.EditEntryFragment"
+        android:label="Edit Entry" />
+
 
 </navigation>

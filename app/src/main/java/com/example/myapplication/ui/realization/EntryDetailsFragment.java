@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import com.example.myapplication.R;
 import com.example.myapplication.data.local.entity.JournalEntryEntity;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ public class EntryDetailsFragment extends Fragment {
 
     private EntryDetailsViewModel viewModel;
     private Button btnDelete;
+    private Button btnEdit;
 
     public EntryDetailsFragment() {}
 
@@ -39,12 +41,13 @@ public class EntryDetailsFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnDelete = view.findViewById(R.id.btnDelete);
+        btnEdit   = view.findViewById(R.id.btnEdit);
         setupToolbar(view);
         setupViewModel(view);
         observeOperationStatus();
     }
 
-    // ── Toolbar ──────────────────────────────────────────────────
+    // ── Toolbar ───────────────────────────────────────────────────
     private void setupToolbar(@NonNull View view) {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v ->
@@ -59,18 +62,19 @@ public class EntryDetailsFragment extends Fragment {
         }
         if (entryId == -1) return;
 
+        // Capture as final so it can be used inside the lambda below.
+        final long finalEntryId = entryId;
+
         viewModel = new ViewModelProvider(this)
                 .get(EntryDetailsViewModel.class);
-        viewModel.loadEntry(entryId);
+        viewModel.loadEntry(finalEntryId);
 
-        // When the entry loads, bind the views AND wire the delete button.
-        // The button needs the loaded entry object — so wiring happens here,
-        // not in onViewCreated, to guarantee entry is never null.
         viewModel.getSelectedEntry().observe(getViewLifecycleOwner(),
                 entry -> {
                     if (entry != null) {
                         bindEntry(view, entry);
                         setupDeleteButton(entry);
+                        setupEditButton(finalEntryId); // safe — effectively final
                     }
                 });
     }
@@ -89,14 +93,23 @@ public class EntryDetailsFragment extends Fragment {
         txtDescription.setText(entry.description);
     }
 
+    // ── Edit button ───────────────────────────────────────────────
+    private void setupEditButton(long entryId) {
+        btnEdit.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putLong("entryId", entryId);
+            Navigation.findNavController(requireView())
+                    .navigate(
+                            R.id.action_entryDetailsFragment_to_editEntryFragment,
+                            args);
+        });
+    }
+
     // ── Delete button + confirmation dialog ───────────────────────
     private void setupDeleteButton(@NonNull JournalEntryEntity entry) {
-        btnDelete.setEnabled(true); // re-enable in case of prior error
+        btnDelete.setEnabled(true);
         btnDelete.setOnClickListener(v -> {
-
-            // Disable immediately — prevents double-tap.
             btnDelete.setEnabled(false);
-
             new AlertDialog.Builder(requireContext())
                     .setTitle("Delete Entry")
                     .setMessage(
@@ -107,17 +120,14 @@ public class EntryDetailsFragment extends Fragment {
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {
                         dialog.dismiss();
-                        // Re-enable — user changed their mind.
                         btnDelete.setEnabled(true);
                     })
-                    .setOnCancelListener(dialog ->
-                            // Handles dismissal by tapping outside the dialog.
-                            btnDelete.setEnabled(true))
+                    .setOnCancelListener(dialog -> btnDelete.setEnabled(true))
                     .show();
         });
     }
 
-    // ── Observe delete result ─────────────────────────────────────
+    // ── Observe operation result ──────────────────────────────────
     private void observeOperationStatus() {
         viewModel = new ViewModelProvider(this)
                 .get(EntryDetailsViewModel.class);
@@ -125,23 +135,31 @@ public class EntryDetailsFragment extends Fragment {
         viewModel.getOperationStatus().observe(getViewLifecycleOwner(),
                 status -> {
                     if (status == null) return;
-
-                    // Consume immediately — prevents re-delivery on rotation.
                     viewModel.clearOperationStatus();
 
                     if ("deleted".equals(status)) {
-                        // isAdded() guard — Fragment may have been detached
-                        // between the delete completing and this callback firing.
                         if (isAdded()) {
                             getParentFragmentManager().popBackStack();
                         }
                     } else if ("error".equals(status)) {
-                        // Re-enable the button so the user can retry.
                         btnDelete.setEnabled(true);
                         Toast.makeText(requireContext(),
                                 "Failed to delete. Please try again.",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    // ── Reload entry on return from Edit screen ───────────────────
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (viewModel != null) {
+            long entryId = -1;
+            if (getArguments() != null) {
+                entryId = getArguments().getLong("entryId", -1);
+            }
+            if (entryId != -1) viewModel.loadEntry(entryId);
+        }
     }
 }
