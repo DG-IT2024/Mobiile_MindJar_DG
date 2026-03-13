@@ -40,7 +40,7 @@ public class RealizationFragment extends Fragment {
 
         textEmptyState = view.findViewById(R.id.textEmptyState);
 
-        setupMyJourneyButton(view);
+//        setupMyJourneyButton(view);
         setupRecyclerView(view);
         setupViewModel();
     }
@@ -53,12 +53,12 @@ public class RealizationFragment extends Fragment {
         if (viewModel != null) viewModel.loadEntries();
     }
 
-    private void setupMyJourneyButton(@NonNull View root) {
-        Button btn = root.findViewById(R.id.button);
-        btn.setOnClickListener(v ->
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_realizationFragment_to_myJourneyFragment));
-    }
+//    private void setupMyJourneyButton(@NonNull View root) {
+//        Button btn = root.findViewById(R.id.button);
+//        btn.setOnClickListener(v ->
+//                Navigation.findNavController(v)
+//                        .navigate(R.id.action_realizationFragment_to_myJourneyFragment));
+//    }
 
     private void setupRecyclerView(@NonNull View root) {
         RecyclerView rv = root.findViewById(R.id.rvRealizationEntries);

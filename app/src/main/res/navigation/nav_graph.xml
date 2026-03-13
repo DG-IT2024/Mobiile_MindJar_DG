@@ -15,9 +15,9 @@
         android:name="com.example.myapplication.ui.realization.RealizationFragment"
         android:label="Realization">
 
-        <action
-            android:id="@+id/action_realizationFragment_to_myJourneyFragment"
-            app:destination="@id/myJourneyFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_realizationFragment_to_myJourneyFragment"-->
+<!--            app:destination="@id/myJourneyFragment" />-->
 
         <action
             android:id="@+id/action_realizationFragment_to_entryDetailsFragment"
@@ -40,10 +40,10 @@
         android:label="Hotline" />
 
     <!-- Deeper screens -->
-    <fragment
-        android:id="@+id/myJourneyFragment"
-        android:name="com.example.myapplication.ui.realization.MyJourneyFragment"
-        android:label="My Journey" />
+<!--    <fragment-->
+<!--        android:id="@+id/myJourneyFragment"-->
+<!--        android:name="com.example.myapplication.ui.realization.MyJourneyFragment"-->
+<!--        android:label="My Journey" />-->
 
     <fragment
         android:id="@+id/entryDetailsFragment"

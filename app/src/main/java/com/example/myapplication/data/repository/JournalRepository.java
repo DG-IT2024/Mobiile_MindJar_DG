@@ -122,4 +122,75 @@ public class JournalRepository {
     public JournalEntryEntity findByFirestoreId(String firestoreId) {
         return dao.findByFirestoreId(firestoreId);
     }
+
+    public void restoreFromFirestore(String userId, Runnable onComplete) {
+        FirebaseFirestore.getInstance()
+                .collection("journal_entries")
+                .document(userId)
+                .collection("entries")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+
+                    if (querySnapshot.isEmpty()) {
+                        // No entries in Firestore — nothing to restore.
+                        Log.d(TAG, "Restore: no documents found for " + userId);
+                        onComplete.run();
+                        return;
+                    }
+
+                    Log.d(TAG, "Restore: found " + querySnapshot.size() + " documents");
+
+                    // Process documents on background thread — Room forbids main thread.
+                    AppExecutors.db().execute(() -> {
+
+                        for (var document : querySnapshot.getDocuments()) {
+                            String firestoreId    = document.getString("firestoreId");
+                            String emotion        = document.getString("emotion");
+                            String description    = document.getString("description");
+                            Long   createdAtEpochMs = document.getLong("createdAtEpochMs");
+
+                            // Skip any document that is missing required fields.
+                            if (firestoreId == null || emotion == null
+                                    || description == null || createdAtEpochMs == null) {
+                                Log.w(TAG, "Restore: skipping malformed document: "
+                                        + document.getId());
+                                continue;
+                            }
+
+                            // Check if this entry already exists in Room.
+                            // Uses the firestoreId index for fast lookup.
+                            JournalEntryEntity existing =
+                                    dao.findByFirestoreId(firestoreId);
+
+                            if (existing != null) {
+                                // Already in Room — skip to avoid duplicates.
+                                Log.d(TAG, "Restore: already exists — " + firestoreId);
+                                continue;
+                            }
+
+                            // Entry is missing from Room — insert it.
+                            // syncedToFirebase = true because it came FROM Firestore.
+                            // Setting it false would cause WorkManager to re-push
+                            // this entry unnecessarily on the next sync run.
+                            JournalEntryEntity entry = new JournalEntryEntity(
+                                    userId, emotion, description, createdAtEpochMs);
+                            entry.firestoreId      = firestoreId;
+                            entry.syncedToFirebase = true;
+                            dao.insert(entry);
+
+                            Log.d(TAG, "Restore: inserted " + firestoreId);
+                        }
+
+                        // All documents processed — notify caller.
+                        onComplete.run();
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // Restore failed (no internet, permission error, etc.)
+                    // Room is served as-is. App still works offline.
+                    Log.w(TAG, "Restore failed: " + e.getMessage());
+                    onComplete.run();
+                });
+    }
+
 }

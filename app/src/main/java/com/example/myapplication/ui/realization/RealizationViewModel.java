@@ -41,6 +41,30 @@ public class RealizationViewModel extends AndroidViewModel {
         });
     }
 
+    public void loadEntriesWithRestore() {
+        String userId = session.getLoggedInUserId();
+        if (userId == null) return;
+
+        AppExecutors.db().execute(() -> {
+
+            // Step 1 — serve Room immediately (may be empty on fresh install)
+            List<JournalEntryEntity> local = repository.listEntries(userId);
+            entries.postValue(local);
+
+            // Step 2 — attempt Firestore restore
+            // onComplete fires after all documents have been processed
+            repository.restoreFromFirestore(userId, () -> {
+
+                // Step 3 — re-query Room now that restore is complete
+                // and push the updated list to the UI
+                AppExecutors.db().execute(() -> {
+                    List<JournalEntryEntity> restored = repository.listEntries(userId);
+                    entries.postValue(restored);
+                });
+            });
+        });
+    }
+
     public LiveData<List<JournalEntryEntity>> getEntries() {
         return entries;
     }
