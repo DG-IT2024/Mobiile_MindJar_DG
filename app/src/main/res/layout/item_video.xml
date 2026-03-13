@@ -29,20 +29,23 @@
             android:layout_height="wrap_content">
 
             <!-- Thumbnail — constrained to 16:9 via ratio on itself -->
+
+            <!-- YouTube play icon overlay — centred over thumbnail -->
             <ImageView
                 android:id="@+id/videoThumbnail"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/cd_video_play"
                 android:scaleType="centerCrop"
                 android:src="@drawable/video"
-                android:contentDescription="@string/cd_video_play"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintDimensionRatio="H,16:9"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintDimensionRatio="H,16:9" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
-            <!-- YouTube play icon overlay — centred over thumbnail -->
             <ImageView
                 android:id="@+id/youtubePlayIcon"
                 android:layout_width="64dp"

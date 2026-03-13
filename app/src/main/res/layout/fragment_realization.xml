@@ -99,223 +99,59 @@
             android:layout_height="50dp"
             android:backgroundTint="@color/button_green"
             android:text="@string/realization_my_journey"
-            app:layout_constraintBottom_toTopOf="@+id/textView10"
+            app:layout_constraintBottom_toTopOf="@+id/textRecentEntries"
             app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
             app:layout_constraintStart_toStartOf="@id/verticalConstraint3"
             app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
+<!--        <TextView-->
+<!--            android:id="@+id/textView10"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:text="@string/realization_weekly_inspiration"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/imageView2"-->
+<!--            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2" />-->
+
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/textRecentEntries"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/realization_weekly_inspiration"
+            android:layout_marginTop="16dp"
+            android:text="Recent Journal Entries"
             android:textStyle="bold"
+            android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/imageView2"
             app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
             app:layout_constraintEnd_toStartOf="@id/verticalConstraint2" />
 
-        <!-- Card 1 happy -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent1"
+        <!-- Empty state message shown when the user has no entries yet -->
+        <TextView
+            android:id="@+id/textEmptyState"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#C5D8A4"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/textView10"
+            android:layout_marginTop="24dp"
+            android:text="No entries yet. Start writing from the Home screen!"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/textRecentEntries"
             app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2">
+            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="95dp"
-                    android:layout_height="95dp"
-                    android:src="@drawable/slightly_happy"
-                    android:contentDescription="@string/cd_happy" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="12dp">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/realization_card1_title"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textView9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/realization_card1_body" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Card 2 grateful -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent2"
+        <!-- Entry list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRealizationEntries"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#FFB8C7"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/cardContent1"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="95dp"
-                    android:layout_height="95dp"
-                    android:src="@drawable/relieved"
-                    android:contentDescription="@string/cd_relieved" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="12dp">
-
-                    <TextView
-                        android:id="@+id/card2Text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/realization_card2_title"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/card2Text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/realization_card2_body" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Card 3 worried -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#CBE2FF"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/cardContent2"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="95dp"
-                    android:layout_height="95dp"
-                    android:src="@drawable/sad"
-                    android:contentDescription="@string/cd_sad" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="12dp">
-
-                    <TextView
-                        android:id="@+id/card3Text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/realization_card3_title"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/card3Text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/realization_card3_body" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Card 4 loved -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#FFC7B6"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintTop_toBottomOf="@id/cardContent3"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintTop_toBottomOf="@id/textRecentEntries"
             app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
             app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="95dp"
-                    android:layout_height="95dp"
-                    android:src="@drawable/heart_face"
-                    android:contentDescription="@string/cd_loved" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="12dp">
-
-                    <TextView
-                        android:id="@+id/card4Text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/realization_card4_title"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/card4Text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/realization_card4_body" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -37,15 +37,7 @@
     <string name="realization_header">Realization</string>
     <string name="realization_calendar">Calendar</string>
     <string name="realization_my_journey">My Journey</string>
-    <string name="realization_weekly_inspiration">Weekly Inspiration</string>
-    <string name="realization_card1_title">Today – Feeling Happy</string>
-    <string name="realization_card1_body">Let your happiness fill the room today. Share a smile, a laugh, and the joy you feel with those around you.</string>
-    <string name="realization_card2_title">Thursday – Feeling Grateful</string>
-    <string name="realization_card2_body">Pause for a moment and appreciate the good in your life. Your gratitude today is a magnet for more blessings tomorrow.</string>
-    <string name="realization_card3_title">Wednesday – Feeling Worried</string>
-    <string name="realization_card3_body">Your mind is just rehearsing for the future. Take a deep breath and focus on what\'s within your control right now. You\'ve got this.</string>
-    <string name="realization_card4_title">Tuesday – Feeling Loved</string>
-    <string name="realization_card4_body">Open your heart to the love that surrounds you. Give a little back and watch how it grows even more.</string>
+    <string name="realization_weekly_inspiration">Today – Feeling Happy</string>
 
     <!-- HOTLINE -->
     <string name="hotline_header">Hotline</string>
