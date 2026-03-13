@@ -67,7 +67,7 @@ public class MyJourneyFragment extends Fragment {
 
         // Trigger Room read + Firestore restore.
         // ViewModel handles all threading internally.
-        viewModel.loadEntriesWithRestore();
+        viewModel.loadEntriesWithRestore(null);
     }
 
     private void openEntryDetails(@NonNull JournalEntryEntity entry) {

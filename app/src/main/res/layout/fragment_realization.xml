@@ -95,8 +95,8 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/button_green"
             android:text="@string/realization_my_journey"
             app:layout_constraintBottom_toTopOf="@+id/textRecentEntries"

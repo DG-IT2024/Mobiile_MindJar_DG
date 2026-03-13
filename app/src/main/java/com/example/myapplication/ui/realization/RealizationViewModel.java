@@ -48,25 +48,29 @@ public class RealizationViewModel extends AndroidViewModel {
 //
 // Uses the same 'entries' LiveData as loadEntries() so both
 // RealizationFragment and MyJourneyFragment observe the same dataset.
-    public void loadEntriesWithRestore() {
+    public void loadEntriesWithRestore(Runnable onComplete) {
         String userId = session.getLoggedInUserId();
         if (userId == null) return;
 
         AppExecutors.db().execute(() -> {
 
-            // Step 1 — serve Room immediately (may be empty on fresh install)
+            // Step 1
             List<JournalEntryEntity> local = repository.listEntries(userId);
             entries.postValue(local);
 
-            // Step 2 — attempt Firestore restore
-            // onComplete fires after all documents have been processed
+            // Step 2
             repository.restoreFromFirestore(userId, () -> {
 
-                // Step 3 — re-query Room now that restore is complete
-                // and push the updated list to the UI
+                // Step 3
                 AppExecutors.db().execute(() -> {
                     List<JournalEntryEntity> restored = repository.listEntries(userId);
                     entries.postValue(restored);
+
+                    // Notify caller on main thread so Fragment can re-enable the button
+                    if (onComplete != null) {
+                        new android.os.Handler(android.os.Looper.getMainLooper())
+                                .post(onComplete);
+                    }
                 });
             });
         });

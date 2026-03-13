@@ -43,6 +43,7 @@ public class RealizationFragment extends Fragment {
         textEmptyState = view.findViewById(R.id.textEmptyState);
 
 //        setupMyJourneyButton(view);
+        setupSyncButton(view);
         setupRecyclerView(view);
         setupViewModel();
     }
@@ -89,6 +90,18 @@ public class RealizationFragment extends Fragment {
         });
 
 
+    }
+
+    private void setupSyncButton(@NonNull View root) {
+        Button btn = root.findViewById(R.id.button);
+        btn.setOnClickListener(v -> {
+            btn.setEnabled(false);
+            btn.setText("Syncing...");
+            viewModel.loadEntriesWithRestore(() -> {
+                btn.setEnabled(true);
+                btn.setText("Sync");
+            });
+        });
     }
 
     private void openEntryDetails(@NonNull JournalEntryEntity entry) {
