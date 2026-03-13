@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.data.local.entity.JournalEntryEntity;
 
+import android.widget.Toast;
+
 public class RealizationFragment extends Fragment {
 
     private RealizationViewModel viewModel;
@@ -78,6 +80,15 @@ public class RealizationFragment extends Fragment {
             textEmptyState.setVisibility(
                     entries == null || entries.isEmpty() ? View.VISIBLE : View.GONE);
         });
+
+        // observe toast messages from the ViewModel
+        viewModel.getToastMessage().observe(getViewLifecycleOwner(), message -> {
+            if (message == null) return;
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            viewModel.clearToast(); // consume so rotation doesn't re-fire
+        });
+
+
     }
 
     private void openEntryDetails(@NonNull JournalEntryEntity entry) {

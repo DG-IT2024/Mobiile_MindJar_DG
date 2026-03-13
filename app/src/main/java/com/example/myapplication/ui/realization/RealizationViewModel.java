@@ -19,6 +19,7 @@ public class RealizationViewModel extends AndroidViewModel {
     private final MutableLiveData<List<JournalEntryEntity>> entries =
             new MutableLiveData<>(Collections.emptyList());
 
+    private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private final JournalRepository repository;
     private final SessionManager session;
 
@@ -51,15 +52,23 @@ public class RealizationViewModel extends AndroidViewModel {
             List<JournalEntryEntity> local = repository.listEntries(userId);
             entries.postValue(local);
 
-            // Step 2 — attempt Firestore restore
-            // onComplete fires after all documents have been processed
+            // Step 2 — tell the UI that Firestore fetch is starting
+            toastMessage.postValue("Checking entries from Firestore...");
+
+            // Step 3 — attempt Firestore restore
             repository.restoreFromFirestore(userId, () -> {
 
-                // Step 3 — re-query Room now that restore is complete
-                // and push the updated list to the UI
+                // Step 4 — re-query Room now that restore is complete
                 AppExecutors.db().execute(() -> {
                     List<JournalEntryEntity> restored = repository.listEntries(userId);
                     entries.postValue(restored);
+
+                    // Step 5 — notify the UI with the result
+                    if (restored != null && !restored.isEmpty()) {
+                        toastMessage.postValue("Entries loaded.");
+                    } else {
+                        toastMessage.postValue("No entries found.");
+                    }
                 });
             });
         });
@@ -67,5 +76,15 @@ public class RealizationViewModel extends AndroidViewModel {
 
     public LiveData<List<JournalEntryEntity>> getEntries() {
         return entries;
+    }
+
+    public LiveData<String> getToastMessage() {
+        return toastMessage;
+    }
+
+    // Call this from the Fragment after showing the Toast
+    // so that rotating the screen doesn't re-fire the same message.
+    public void clearToast() {
+        toastMessage.setValue(null);
     }
 }
