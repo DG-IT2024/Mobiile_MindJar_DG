@@ -30,8 +30,7 @@ public class RealizationViewModel extends AndroidViewModel {
         loadEntries();
     }
 
-    // Called once on construction; also call from Fragment.onResume()
-    // so new entries written on the Home screen appear immediately.
+    // Fast Room-only read — called by RealizationFragment on every onResume()
     public void loadEntries() {
         String userId = session.getLoggedInUserId();
         if (userId == null) return;
@@ -41,7 +40,14 @@ public class RealizationViewModel extends AndroidViewModel {
             entries.postValue(list);   // postValue is safe from background thread
         });
     }
-
+    // Room + Firestore restore — called by MyJourneyFragment on open
+    // ── Used by MyJourneyFragment (Room + Firestore restore) ──────────────
+// Step 1: Post Room entries immediately — list is not blank while restore runs.
+// Step 2: Pull any Firestore entries missing from Room.
+// Step 3: Re-query Room after restore and post the refreshed list.
+//
+// Uses the same 'entries' LiveData as loadEntries() so both
+// RealizationFragment and MyJourneyFragment observe the same dataset.
     public void loadEntriesWithRestore() {
         String userId = session.getLoggedInUserId();
         if (userId == null) return;
@@ -52,27 +58,20 @@ public class RealizationViewModel extends AndroidViewModel {
             List<JournalEntryEntity> local = repository.listEntries(userId);
             entries.postValue(local);
 
-            // Step 2 — tell the UI that Firestore fetch is starting
-            toastMessage.postValue("Checking entries from Firestore...");
-
-            // Step 3 — attempt Firestore restore
+            // Step 2 — attempt Firestore restore
+            // onComplete fires after all documents have been processed
             repository.restoreFromFirestore(userId, () -> {
 
-                // Step 4 — re-query Room now that restore is complete
+                // Step 3 — re-query Room now that restore is complete
+                // and push the updated list to the UI
                 AppExecutors.db().execute(() -> {
                     List<JournalEntryEntity> restored = repository.listEntries(userId);
                     entries.postValue(restored);
-
-                    // Step 5 — notify the UI with the result
-                    if (restored != null && !restored.isEmpty()) {
-                        toastMessage.postValue("Entries loaded.");
-                    } else {
-                        toastMessage.postValue("No entries found.");
-                    }
                 });
             });
         });
     }
+
 
     public LiveData<List<JournalEntryEntity>> getEntries() {
         return entries;

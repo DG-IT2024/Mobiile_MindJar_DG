@@ -123,6 +123,16 @@ public class JournalRepository {
         return dao.findByFirestoreId(firestoreId);
     }
 
+    // ─────────────────────────────────────────────────────────────────
+// RESTORE — pulls Firestore entries into Room on fresh install/login.
+// Called by RealizationViewModel.loadEntriesWithRestore().
+//
+// Flow:
+//   1. Query Firestore for all entries under this userId
+//   2. For each document, check if firestoreId already exists in Room
+//   3. Missing → insert into Room with syncedToFirebase = true
+//   4. Call onComplete so ViewModel can refresh the UI
+// ─────────────────────────────────────────────────────────────────
     public void restoreFromFirestore(String userId, Runnable onComplete) {
         FirebaseFirestore.getInstance()
                 .collection("journal_entries")
@@ -192,5 +202,8 @@ public class JournalRepository {
                     onComplete.run();
                 });
     }
+
+
+
 
 }
