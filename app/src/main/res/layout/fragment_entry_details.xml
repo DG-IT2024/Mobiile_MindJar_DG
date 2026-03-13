@@ -18,16 +18,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- CONTENT -->
+    <!-- Date / time label -->
     <TextView
-        android:id="@+id/textBody"
+        android:id="@+id/txtDetailDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="This is where you show the mood entry details."
-        android:textSize="16sp"
-        android:layout_margin="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:text="Mar 12, 2026 · 02:00 PM"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Emotion chip / label -->
+    <TextView
+        android:id="@+id/txtDetailEmotion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="20dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:background="@drawable/circle_emotion_bg"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textAllCaps="true"
+        app:layout_constraintTop_toBottomOf="@id/txtDetailDate"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Description body -->
+    <TextView
+        android:id="@+id/txtDetailDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="40dp"
+        android:lineSpacingMultiplier="1.5"
+        android:text="Entry preview..."
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDetailEmotion"
+        app:layout_constraintVertical_bias="0.048" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
