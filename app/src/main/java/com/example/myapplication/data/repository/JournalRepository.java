@@ -203,6 +203,38 @@ public class JournalRepository {
                 });
     }
 
+    // ─────────────────────────────────────────────────────────────────
+    // DELETE — called from EntryDetailsViewModel on a background thread
+    // Step 1: Delete from Room immediately (source of truth).
+    // Step 2: Delete from Firestore asynchronously (fire-and-forget).
+    // If Firestore delete fails and restoreFromFirestore() runs later,
+    // the entry will reappear — this is a known offline limitation.
+    // ─────────────────────────────────────────────────────────────────
+    public void deleteEntry(JournalEntryEntity entry) {
+
+        // Step 1: Room delete — synchronous, must be on background thread.
+        dao.deleteByEntryId(entry.entryId);
+        Log.d(TAG, "Deleted entry from Room: " + entry.entryId);
+
+        // Step 2: Firestore delete — skip if entry was never synced.
+        if (entry.firestoreId == null || entry.firestoreId.isEmpty()) {
+            Log.d(TAG, "No firestoreId — skipping Firestore delete");
+            return;
+        }
+
+        // Firestore path mirrors pushToFirestore():
+        // journal_entries/{userId}/entries/{firestoreId}
+        FirebaseFirestore.getInstance()
+                .collection("journal_entries")
+                .document(entry.userId)
+                .collection("entries")
+                .document(entry.firestoreId)
+                .delete()
+                .addOnSuccessListener(unused ->
+                        Log.d(TAG, "Deleted from Firestore: " + entry.firestoreId))
+                .addOnFailureListener(e ->
+                        Log.w(TAG, "Firestore delete failed: " + e.getMessage()));
+    }
 
 
 

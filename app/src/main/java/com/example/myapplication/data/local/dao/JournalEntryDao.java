@@ -43,4 +43,12 @@ public interface JournalEntryDao {
     // already exists in Room. If it does, skip the insert.
     @Query("SELECT * FROM journal_entries WHERE firestoreId = :firestoreId LIMIT 1")
     JournalEntryEntity findByFirestoreId(String firestoreId);
+
+    // Deletes a single entry by its Room primary key.
+    // Called from JournalRepository.deleteEntry() on a background thread.
+    @Query("DELETE FROM journal_entries WHERE entryId = :entryId")
+    void deleteByEntryId(long entryId);
+
+
+
 }

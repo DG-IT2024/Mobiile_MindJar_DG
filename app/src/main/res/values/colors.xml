@@ -6,6 +6,7 @@
     <color name="video_background">#EAF2FF</color>
     <color name="hotline_background">#EAF2FF</color>
     <color name="journal_background">#EAF2FF</color>
+    <color name="image_background">#EAF2FF</color>
 
     <!-- Background and general theme colors -->
     <color name="background_light">#FDFFF8</color>
