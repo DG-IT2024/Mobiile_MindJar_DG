@@ -16,12 +16,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
+import com.example.myapplication.ui.MainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 
 import com.example.myapplication.data.*;
-import com.example.myapplication.data.local.*;
-import com.example.myapplication.data.repository.*;
+import android.content.Intent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+
 
 
 /**
@@ -51,6 +55,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     // Color used to highlight the selected icon.
     private static final int SELECTED_BG_COLOR = Color.parseColor("#A5D6A7"); // light green
     private HomeViewModel viewModel;
+
+    // Slide menu
+    private LinearLayout slideMenuPanel;
+    private LinearLayout menuTabHandle;   // LinearLayout — holds person icon
+    private boolean      isMenuOpen = false;
+
     /**
      * Required empty public constructor.
      * The Android system uses this when recreating the fragment.
@@ -103,6 +113,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         btnSave = view.findViewById(R.id.button);
         textFeeling = view.findViewById(R.id.inputFeeling);
+        slideMenuPanel = view.findViewById(R.id.slideMenuPanel);
+        menuTabHandle  = view.findViewById(R.id.menuTabHandle);
+
     }
 
     /**
@@ -114,6 +127,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         iconPressured.setOnClickListener(this);
         iconAngry.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+        menuTabHandle.setOnClickListener(v -> toggleMenu());
+
+        slideMenuPanel.findViewById(R.id.menuSignOut)
+                .setOnClickListener(v -> {
+                    closeMenu();
+                    showLogoutConfirmation();
+                });
+
     }
 
     @Override
@@ -285,6 +306,75 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (iconId == R.id.pressuredIcon) return "pressured";
         if (iconId == R.id.angryIcon)     return "angry";
         return "unknown";
+    }
+
+
+    //Slide Menu
+    /**
+     * Called when the tab strip is tapped.
+     * Opens the panel if it is closed, closes it if it is open.
+     */
+    private void toggleMenu() {
+        if (isMenuOpen) closeMenu();
+        else            openMenu();
+    }
+
+    /**
+     * Makes the panel visible and plays the slide-in animation.
+     * setVisibility(VISIBLE) MUST be called before startAnimation().
+     */
+    private void openMenu() {
+        slideMenuPanel.setVisibility(View.VISIBLE);
+        Animation anim = AnimationUtils.loadAnimation(
+                requireContext(), R.anim.slide_in_left);
+        slideMenuPanel.startAnimation(anim);
+        isMenuOpen = true;
+    }
+
+
+    /**
+     * Plays the slide-out animation, then hides the panel.
+     * setVisibility(GONE) is inside onAnimationEnd() — NOT before startAnimation().
+     */
+    private void closeMenu() {
+        Animation anim = AnimationUtils.loadAnimation(
+                requireContext(), R.anim.slide_out_left);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override public void onAnimationStart(Animation a)  {}
+            @Override public void onAnimationRepeat(Animation a) {}
+            @Override public void onAnimationEnd(Animation a) {
+                slideMenuPanel.setVisibility(View.GONE);
+            }
+        });
+        slideMenuPanel.startAnimation(anim);
+        isMenuOpen = false;
+    }
+
+     /**
+     * Shows a confirmation dialog before signing out.
+     * Reuses the same AlertDialog pattern already in the fragment.
+     */
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Log Out")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Log Out", (d, w) -> performLogout())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    /**
+     * Clears the Firebase session and local prefs, then navigates
+     * to MainActivity with a cleared back stack so the user cannot
+     * press Back to return to the Dashboard after logout.
+     */
+    private void performLogout() {
+        new SessionManager(requireContext()).clearSession();
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 

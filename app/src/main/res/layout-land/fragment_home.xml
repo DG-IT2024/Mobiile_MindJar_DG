@@ -1,328 +1,394 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="vertical"
-    android:overScrollMode="always"
-    android:isScrollContainer="true"
-    android:clipToPadding="false"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:background="@color/background_light"
     tools:context=".ui.home.HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- ═══════════════════════════════════════════════════
+         MAIN SCROLL CONTENT
+         ═══════════════════════════════════════════════════ -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:overScrollMode="always"
+        android:isScrollContainer="true"
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
-        <!-- centering rails (explicit size -> fixes lint) -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.10" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint2"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.90" />
+            <!-- Centering rails -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalConstraint1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.10" />
 
-        <!-- Header -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardBackgroundColor="#F4FCD9"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintWidth_max="900dp"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalConstraint2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.90" />
 
+            <!-- Header Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#F4FCD9"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="900dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/cd_handshake"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/handshake" />
+
+                    <TextView
+                        android:id="@+id/textWelcomeUser"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/home_welcome_user"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Feeling Question Label -->
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/home_feeling_question"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:layout_constraintWidth_max="900dp" />
+
+            <!-- Emotion Icons Row -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="12dp"
-                android:baselineAligned="false">
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/textView9"
+                app:layout_constraintWidth_max="900dp">
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/handshake"
-                    android:contentDescription="@string/cd_handshake"/>
-
-                <TextView
-                    android:id="@+id/textWelcomeUser"
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+                    <ImageView
+                        android:id="@+id/happyIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_emotion_ripple"
+                        android:clickable="true"
+                        android:contentDescription="@string/cd_happy"
+                        android:focusable="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/slightly_happy" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+                    <ImageView
+                        android:id="@+id/sadIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_emotion_ripple"
+                        android:clickable="true"
+                        android:contentDescription="@string/cd_sad"
+                        android:focusable="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/sad" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+                    <ImageView
+                        android:id="@+id/pressuredIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_emotion_ripple"
+                        android:clickable="true"
+                        android:contentDescription="@string/cd_pressured"
+                        android:focusable="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/scrunched_eyes" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+                    <ImageView
+                        android:id="@+id/angryIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_emotion_ripple"
+                        android:clickable="true"
+                        android:contentDescription="@string/cd_angry"
+                        android:focusable="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/rage" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <!-- Emotion Labels Row -->
+            <LinearLayout
+                android:id="@+id/labelsRow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout"
+                app:layout_constraintWidth_max="900dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/home_welcome_user"
-                    android:textSize="20sp"
+                    android:text="@string/label_happy"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/label_sad"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/label_pressured"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/label_angry"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/home_feeling_question"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/cardView"
-            app:layout_constraintWidth_max="900dp"/>
-
-        <!-- Emotions row (comfortable size + padding inside tiles) -->
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="0dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:baselineAligned="false"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/textView9"
-            app:layout_constraintWidth_max="900dp">
-
-            <!-- Happy -->
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:padding="10dp">
-                <ImageView
-                    android:background="@drawable/bg_emotion_ripple"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/happyIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/slightly_happy"
-                    android:contentDescription="@string/cd_happy"/>
-            </FrameLayout>
-
-            <!-- Sad -->
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:padding="10dp">
-                <ImageView
-                    android:background="@drawable/bg_emotion_ripple"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/sadIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sad"
-                    android:contentDescription="@string/cd_sad"/>
-            </FrameLayout>
-
-            <!-- Pressured -->
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:padding="10dp">
-                <ImageView
-                    android:background="@drawable/bg_emotion_ripple"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/pressuredIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/scrunched_eyes"
-                    android:contentDescription="@string/cd_pressured"/>
-            </FrameLayout>
-
-            <!-- Angry -->
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:padding="10dp">
-                <ImageView
-                    android:background="@drawable/bg_emotion_ripple"
-                    android:padding="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/angryIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/rage"
-                    android:contentDescription="@string/cd_angry"/>
-            </FrameLayout>
-        </LinearLayout>
-
-        <!-- Labels -->
-        <LinearLayout
-            android:id="@+id/labelsRow"
-            android:baselineAligned="false"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
-            app:layout_constraintWidth_max="900dp">
-
+            <!-- "Add your feelings" Label -->
             <TextView
+                android:id="@+id/textView10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/label_happy"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
+                android:layout_marginTop="14dp"
+                android:text="@string/home_add_your_feelings"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/labelsRow"
+                app:layout_constraintWidth_max="900dp" />
 
-            <TextView
+            <!-- Feeling Text Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/label_sad"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
+                android:layout_marginTop="10dp"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/textView10"
+                app:layout_constraintWidth_max="900dp"
+                app:layout_constraintWidth_percent="0.8">
 
-            <TextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputFeeling"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|start"
+                    android:hint="@string/home_feeling_hint"
+                    android:inputType="textMultiLine"
+                    android:minLines="4" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Mic and Upload Attachments Row -->
+            <LinearLayout
+                android:id="@+id/attachmentsRow"
                 android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="8dp"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout"
+                app:layout_constraintWidth_max="900dp"
+                app:layout_constraintWidth_percent="0.8">
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="42dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/cd_microphone"
+                    android:src="@drawable/microphone" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/cd_upload"
+                    android:src="@drawable/upload" />
+
+            </LinearLayout>
+
+            <!-- Send Button -->
+            <Button
+                android:id="@+id/button"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/label_pressured"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/button_green"
+                android:text="@string/home_send"
+                app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
+                app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
+                app:layout_constraintTop_toBottomOf="@id/attachmentsRow"
+                app:layout_constraintWidth_max="900dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/label_angry"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- Below-the-fold content -->
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="@string/home_add_your_feelings"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/labelsRow"
-            app:layout_constraintWidth_max="900dp"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/black"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/textView10"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintWidth_max="900dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputFeeling"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minLines="4"
-                android:gravity="top|start"
-                android:inputType="textMultiLine"
-                android:hint="@string/home_feeling_hint" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- MIC + UPLOAD row (added back) -->
-        <LinearLayout
-            android:id="@+id/attachmentsRow"
-            android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="8dp"
-            android:gravity="end|center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintWidth_max="900dp">
-
+            <!-- Sent icon overlaying right side of Send button -->
             <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="42dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/microphone"
-                android:contentDescription="@string/cd_microphone" />
+                android:id="@+id/imageView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/cd_sent"
+                android:src="@drawable/sent"
+                app:layout_constraintBottom_toBottomOf="@id/button"
+                app:layout_constraintEnd_toEndOf="@id/button"
+                app:layout_constraintTop_toTopOf="@id/button" />
 
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="36dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/upload"
-                android:contentDescription="@string/cd_upload" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <!-- Send button + “sent” icon (added back) -->
-        <Button
-            android:id="@+id/button"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/home_send"
-            android:backgroundTint="@color/button_green"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/attachmentsRow"
-            app:layout_constraintWidth_max="900dp"/>
+    <!-- Green tab strip with person icon — tap to open/close the slide menu -->
+    <LinearLayout
+        android:id="@+id/menuTabHandle"
+        android:layout_width="28dp"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/tab_handle_shape"
+        android:clickable="true"
+        android:elevation="6dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/sent"
-            android:contentDescription="@string/cd_sent"
-            app:layout_constraintTop_toTopOf="@id/button"
-            app:layout_constraintBottom_toBottomOf="@id/button"
-            app:layout_constraintEnd_toEndOf="@id/button" />
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="Account menu"
+            android:src="@drawable/ic_person" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+    <!-- Slide-out panel — hidden by default, animates in from the left -->
+    <LinearLayout
+        android:id="@+id/slideMenuPanel"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="94dp"
+        android:layout_marginStart="28dp"
+        android:background="@drawable/panel_background"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:paddingVertical="4dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!-- Sign Out option -->
+        <TextView
+            android:id="@+id/menuSignOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_logout"
+            android:gravity="center_vertical"
+            android:padding="14dp"
+            android:text="Sign Out"
+            android:textColor="#D32F2F"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</FrameLayout>
