@@ -1,158 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="vertical"
-    android:overScrollMode="always"
-    android:isScrollContainer="true"
-    android:clipToPadding="false"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:background="@color/background_light"
     tools:context=".ui.realization.RealizationFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!-- ─────────────────────────────────────────────
+         Guidelines
+         ───────────────────────────────────────────── -->
 
-        <!-- Side rails — tighter in landscape to use wider screen -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticalPanelSplit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.38" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTopRail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
-        <!-- Midpoint guideline splitting left (jar) and right (button) in the header row -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.37" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottomRail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
 
-        <!-- Header card — compact height for landscape -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="#F4FCD9"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintWidth_max="900dp">
+    <!-- Left panel inner side rails -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftInner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.03" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftOuter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/head"
-                    android:contentDescription="@string/cd_head" />
 
-                <TextView
-                    android:id="@+id/textWelcomeUser"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/realization_header"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+    <!-- ─────────────────────────────────────────────
+         LEFT PANEL — header card + jar + button
+         ───────────────────────────────────────────── -->
 
-        <!-- Jar image — left half, below header -->
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="0dp"
-            android:layout_height="110dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/jar_icon"
-            android:contentDescription="@string/cd_jar"
-            app:layout_constraintTop_toBottomOf="@id/cardView"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint3"
-            app:layout_constraintWidth_max="900dp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="#F4FCD9"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTopRail"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toTopOf="@id/imageView2"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.5">
 
-        <!-- My Journey button — right half, vertically centred with jar -->
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/button_green"
-            android:text="@string/realization_my_journey"
-            app:layout_constraintTop_toBottomOf="@id/cardView"
-            app:layout_constraintBottom_toBottomOf="@id/imageView2"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint3"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
 
-        <!-- Recent entries label -->
-        <TextView
-            android:id="@+id/textRecentEntries"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Recent Journal Entries"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/imageView2"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintWidth_max="900dp" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/head"
+                android:contentDescription="@string/cd_head" />
 
-        <!-- Empty state — shown when there are no entries yet -->
-        <TextView
-            android:id="@+id/textEmptyState"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="No entries yet. Start writing from the Home screen!"
-            android:textAlignment="center"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/textRecentEntries"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintWidth_max="900dp" />
+            <TextView
+                android:id="@+id/textWelcomeUser"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/realization_header"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!-- Entry list -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRealizationEntries"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:nestedScrollingEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/textRecentEntries"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth_max="900dp" />
+    <!-- Jar image -->
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/jar_icon"
+        android:contentDescription="@string/cd_jar"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toTopOf="@id/button" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+    <!-- My Journey button -->
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/button_green"
+        android:text="@string/realization_my_journey"
+        app:layout_constraintTop_toBottomOf="@id/imageView2"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineBottomRail" />
+
+
+    <!-- ─────────────────────────────────────────────
+         VERTICAL DIVIDER
+         ───────────────────────────────────────────── -->
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="#CCCCCC"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guidelineVerticalPanelSplit" />
+
+
+    <!-- ─────────────────────────────────────────────
+         RIGHT PANEL — recent entries label + list
+         ───────────────────────────────────────────── -->
+
+    <!-- Recent entries label -->
+    <TextView
+        android:id="@+id/textRecentEntries"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:text="Recent Journal Entries"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Empty state -->
+    <TextView
+        android:id="@+id/textEmptyState"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:text="No entries yet. Start writing from the Home screen!"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/textRecentEntries"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Entry list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRealizationEntries"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="8dp"
+        android:nestedScrollingEnabled="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/textRecentEntries"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

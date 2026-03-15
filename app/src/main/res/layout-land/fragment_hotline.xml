@@ -1,273 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="vertical"
-    android:overScrollMode="always"
-    android:isScrollContainer="true"
-    android:clipToPadding="false"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:background="@color/background_light"
     tools:context=".ui.hotline.HotlineFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!-- ─────────────────────────────────────────────
+         Guidelines
+         ───────────────────────────────────────────── -->
 
-        <!-- side rails -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.10"/>
+    <!-- Splits screen into left (0–38 %) and right (38–100 %) panels -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticalPanelSplit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.38" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint2"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.90"/>
+    <!-- Horizontal rails for the left panel content -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTopRail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
-        <!-- header -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardBackgroundColor="#F4FCD9"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintWidth_max="900dp"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottomRail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+    <!-- Left-panel inner side rails (adds breathing room) -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftInner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.03" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="72dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/hotline"
-                    android:contentDescription="@string/cd_hotline_header" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftOuter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
 
-                <TextView
-                    android:id="@+id/textWelcomeUser"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/hotline_header"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/hotline_caption"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/cardView"
-            app:layout_constraintWidth_max="900dp" />
+    <!-- ─────────────────────────────────────────────
+         LEFT PANEL
+         ───────────────────────────────────────────── -->
 
-        <!-- card 1 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#EAF2FF"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/textView1"
-            app:layout_constraintWidth_max="900dp">
+    <!-- Header card — compact height for landscape -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="#F4FCD9"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTopRail"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toTopOf="@id/textView1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.5">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/textHeaderCard1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hotline_ncmh_title"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/hotline"
+                android:contentDescription="@string/cd_hotline_header" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingTop="8dp">
+            <TextView
+                android:id="@+id/textWelcomeUser"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/hotline_header"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/textView13"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/hotline_ncmh_detail" />
+    <!-- Caption -->
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/hotline_caption"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineBottomRail" />
 
-                    <ImageView
-                        android:id="@+id/imageEmail"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/email"
-                        android:contentDescription="@string/cd_email" />
 
-                    <ImageView
-                        android:id="@+id/imagePhone"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/phone"
-                        android:contentDescription="@string/cd_phone" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+    <!-- ─────────────────────────────────────────────
+         VERTICAL DIVIDER
+         ───────────────────────────────────────────── -->
 
-        <!-- card 2 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#EAF2FF"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/cardContent1"
-            app:layout_constraintWidth_max="900dp">
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="#CCCCCC"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guidelineVerticalPanelSplit" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
 
-                <TextView
-                    android:id="@+id/textHeaderCard2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hotline_hopeline_title"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+    <!-- ─────────────────────────────────────────────
+         RIGHT PANEL — hotline list
+         ───────────────────────────────────────────── -->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingTop="8dp">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerHotlines"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-                    <TextView
-                        android:id="@+id/textView14"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/hotline_hopeline_detail" />
-
-                    <ImageView
-                        android:id="@+id/imageEmail2"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/email"
-                        android:contentDescription="@string/cd_email" />
-
-                    <ImageView
-                        android:id="@+id/imagePhone2"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/phone"
-                        android:contentDescription="@string/cd_phone" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- card 3 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardContent3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#EAF2FF"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/cardContent2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth_max="900dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <TextView
-                    android:id="@+id/textHeaderCard3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hotline_touch_title"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingTop="8dp">
-
-                    <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/hotline_touch_detail" />
-
-                    <ImageView
-                        android:id="@+id/imageEmail3"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/email"
-                        android:contentDescription="@string/cd_email" />
-
-                    <ImageView
-                        android:id="@+id/imagePhone3"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/phone"
-                        android:contentDescription="@string/cd_phone" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

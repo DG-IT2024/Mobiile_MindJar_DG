@@ -1,173 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="vertical"
-    android:overScrollMode="always"
-    android:isScrollContainer="true"
-    android:clipToPadding="false"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:background="@color/background_light"
     tools:context=".ui.hope.HopeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!-- Guidelines -->
 
-        <!-- side rails -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.10"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticalPanelSplit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.38" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalConstraint2"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.90"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTopRail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
-        <!-- header -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardBackgroundColor="#F4FCD9"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintWidth_max="900dp"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottomRail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+    <!-- Left panel inner side rails -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftInner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.03" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="72dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ribbon"
-                    android:contentDescription="@string/cd_ribbon" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeftOuter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
 
-                <TextView
-                    android:id="@+id/textWelcomeUser"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/hope_header"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/hope_caption"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/cardView"
-            app:layout_constraintWidth_max="900dp" />
+    <!-- ─────────────────────────────────────────────
+         LEFT PANEL — header + caption
+         ───────────────────────────────────────────── -->
 
-        <!-- inspirational image: smaller and centered -->
-
-        <!-- navRow: icons grouped and enlarged -->
-
-        <ImageView
-            android:id="@+id/currentImage"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="60dp"
-            android:contentDescription="@string/cd_inspirational"
-            android:scaleType="centerCrop"
-            android:src="@drawable/loading_image"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView1"
-            app:layout_constraintWidth_max="900dp"
-            app:layout_constraintWidth_percent="0.62" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="#F4FCD9"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTopRail"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toTopOf="@id/textView1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.5">
 
         <LinearLayout
-            android:id="@+id/navRow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/verticalConstraint1"
-            app:layout_constraintEnd_toStartOf="@id/verticalConstraint2"
-            app:layout_constraintTop_toBottomOf="@id/currentImage"
-            app:layout_constraintWidth_max="900dp">
+            android:gravity="center_vertical"
+            android:padding="8dp">
 
-            <!-- Prev -->
-            <FrameLayout
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginEnd="16dp">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/ribbon"
+                android:contentDescription="@string/cd_ribbon" />
 
-                <ImageView
-                    android:id="@+id/arrowLeft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:rotation="180"
-                    android:src="@drawable/arrow"
-                    app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
-                    app:layout_constraintStart_toStartOf="@+id/verticalConstraint1" />
-            </FrameLayout>
-
-            <!-- Like -->
-            <FrameLayout
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginHorizontal="16dp">
-
-                <ImageView
-                    android:id="@+id/heart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/heart_circle"
-                    app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
-                    app:layout_constraintStart_toStartOf="@+id/verticalConstraint1" />
-            </FrameLayout>
-
-            <!-- Next -->
-            <FrameLayout
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="16dp">
-
-                <ImageView
-                    android:id="@+id/arrowRight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow"
-                    app:layout_constraintEnd_toStartOf="@+id/verticalConstraint2"
-                    app:layout_constraintStart_toStartOf="@+id/verticalConstraint1" />
-            </FrameLayout>
+            <TextView
+                android:id="@+id/textWelcomeUser"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/hope_header"
+                android:textSize="22sp"
+                android:textStyle="bold" />
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/hope_caption"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeftInner"
+        app:layout_constraintEnd_toStartOf="@id/guidelineLeftOuter"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineBottomRail" />
+
+
+    <!-- ─────────────────────────────────────────────
+         VERTICAL DIVIDER
+         ───────────────────────────────────────────── -->
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="#CCCCCC"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guidelineVerticalPanelSplit" />
+
+
+    <!-- ─────────────────────────────────────────────
+         RIGHT PANEL — inspirational image + nav row
+         ───────────────────────────────────────────── -->
+
+    <ImageView
+        android:id="@+id/currentImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/cd_inspirational"
+        android:scaleType="centerCrop"
+        android:src="@drawable/loading_image"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navRow"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintHeight_max="300dp" />
+
+    <LinearLayout
+        android:id="@+id/navRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/currentImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Prev -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="16dp">
+
+            <ImageView
+                android:id="@+id/arrowLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:rotation="180"
+                android:src="@drawable/arrow" />
+        </FrameLayout>
+
+        <!-- Like -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/heart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/heart_circle" />
+        </FrameLayout>
+
+        <!-- Next -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp">
+
+            <ImageView
+                android:id="@+id/arrowRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/arrow" />
+        </FrameLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
