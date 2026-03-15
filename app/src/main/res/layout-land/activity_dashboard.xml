@@ -12,14 +12,16 @@
     <!-- Fragment gets everything above the bottom bar -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView2"
-        android:name="com.example.myapplication.ui.home.HomeFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="FragmentTagUsage" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!-- Bottom nav anchored to bottom (identical items) -->
     <LinearLayout

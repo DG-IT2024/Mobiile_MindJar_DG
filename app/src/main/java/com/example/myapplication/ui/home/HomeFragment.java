@@ -17,6 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.ui.MainActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
 
@@ -369,12 +372,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * press Back to return to the Dashboard after logout.
      */
     private void performLogout() {
-        new SessionManager(requireContext()).clearSession();
-        Intent intent = new Intent(requireActivity(), MainActivity.class);
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        // 1. Sign out Google's token cache first
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
+
+        googleSignInClient.signOut().addOnCompleteListener(task -> {
+            // 2. Then clear Firebase + SharedPrefs
+            new SessionManager(requireContext()).clearSession();
+
+            // 3. Navigate back to login
+            Intent intent = new Intent(requireActivity(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
     }
 
 

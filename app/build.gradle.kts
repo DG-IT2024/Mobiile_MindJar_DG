@@ -41,7 +41,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
 
-
     // UI
     implementation(libs.activity)
     implementation(libs.constraintlayout)
@@ -78,6 +77,11 @@ dependencies {
     //RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
+    //clear log out
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
     // WorkManager — background sync when connectivity is restored
     implementation("androidx.work:work-runtime:2.9.0")
 
@@ -85,4 +89,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }
