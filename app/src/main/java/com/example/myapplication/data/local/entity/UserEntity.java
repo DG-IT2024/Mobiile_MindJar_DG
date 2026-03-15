@@ -19,16 +19,10 @@ public class UserEntity {
 
     public String email;
 
-    // Store BCrypt hash string (includes salt internally)
-    public String passwordHash;
-
-    public long createdAtEpochMs;
-
     public UserEntity(String fullName, String email, String passwordHash, long createdAtEpochMs) {
         this.fullName = fullName;
         this.email = email;
-        this.passwordHash = passwordHash;
-        this.createdAtEpochMs = createdAtEpochMs;
+
     }
 }
 
