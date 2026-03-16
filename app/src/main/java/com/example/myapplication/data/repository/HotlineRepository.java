@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myapplication.data.local.AppDatabase;
 import com.example.myapplication.data.local.dao.HotlineDao;
 import com.example.myapplication.data.local.entity.HotlineEntity;
-import com.example.myapplication.data.model.HotlineEntry;
+import com.example.myapplication.data.local.entity.HotlineEntry;
 import com.example.myapplication.data.local.AppExecutors;
 
 import com.google.firebase.database.DataSnapshot;

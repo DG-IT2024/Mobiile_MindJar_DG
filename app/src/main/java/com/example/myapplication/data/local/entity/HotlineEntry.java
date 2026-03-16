@@ -1,4 +1,4 @@
-package com.example.myapplication.data.model;
+package com.example.myapplication.data.local.entity;
 
 /** Plain object Firebase deserializes hotline JSON into. */
 public class HotlineEntry {

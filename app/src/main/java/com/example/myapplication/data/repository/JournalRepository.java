@@ -7,6 +7,7 @@ import com.example.myapplication.data.local.AppDatabase;
 import com.example.myapplication.data.local.AppExecutors;
 import com.example.myapplication.data.local.dao.JournalEntryDao;
 import com.example.myapplication.data.local.entity.JournalEntryEntity;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
@@ -124,16 +125,10 @@ public class JournalRepository {
     public JournalEntryEntity findByFirestoreId(String firestoreId) {
         return dao.findByFirestoreId(firestoreId);
     }
-
     // ─────────────────────────────────────────────────────────────────
-    // RESTORE — pulls Firestore entries into Room on fresh install/login.
-    // Called by RealizationViewModel.loadEntriesWithRestore().
-    //
-    // Flow:
-    //   1. Query Firestore for all entries under this userId
-    //   2. For each document, check if firestoreId already exists in Room
-    //   3. Missing → insert into Room with syncedToFirebase = true
-    //   4. Call onComplete so ViewModel can refresh the UI
+    // RESTORE — full two-way sync: inserts, updates, deletes.
+    // Called by RealizationViewModel.loadEntriesWithRestore() when the
+    // user taps Sync.
     // ─────────────────────────────────────────────────────────────────
     public void restoreFromFirestore(String userId, Runnable onComplete) {
         FirebaseFirestore.getInstance()
@@ -143,65 +138,72 @@ public class JournalRepository {
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
 
-                    if (querySnapshot.isEmpty()) {
-                        // No entries in Firestore — nothing to restore.
-                        Log.d(TAG, "Restore: no documents found for " + userId);
-                        onComplete.run();
-                        return;
-                    }
-
-                    Log.d(TAG, "Restore: found " + querySnapshot.size() + " documents");
-
-                    // Process documents on background thread — Room forbids main thread.
                     AppExecutors.db().execute(() -> {
 
-                        for (var document : querySnapshot.getDocuments()) {
-                            String firestoreId    = document.getString("firestoreId");
-                            String emotion        = document.getString("emotion");
-                            String description    = document.getString("description");
-                            Long   createdAtEpochMs = document.getLong("createdAtEpochMs");
+                        // ── Step 1: Build the Firestore truth set ──────────────
+                        // Keys = every firestoreId that Firestore currently holds.
+                        java.util.Set<String> firestoreIds = new java.util.HashSet<>();
 
-                            // Skip any document that is missing required fields.
-                            if (firestoreId == null || emotion == null
-                                    || description == null || createdAtEpochMs == null) {
-                                Log.w(TAG, "Restore: skipping malformed document: "
-                                        + document.getId());
-                                continue;
+                        for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                            String firestoreId = doc.getString("firestoreId");
+                            if (firestoreId == null) continue;
+
+                            String emotion     = doc.getString("emotion");
+                            String description = doc.getString("description");
+                            Long   ts          = doc.getLong("createdAtEpochMs");
+                            if (emotion == null || description == null || ts == null) continue;
+
+                            firestoreIds.add(firestoreId);
+
+                            JournalEntryEntity existing = dao.findByFirestoreId(firestoreId);
+
+                            if (existing == null) {
+                                // ── INSERT: entry missing from Room ────────────
+                                JournalEntryEntity fresh = new JournalEntryEntity(
+                                        userId, emotion, description, ts);
+                                fresh.firestoreId      = firestoreId;
+                                fresh.syncedToFirebase = true;
+                                dao.insert(fresh);
+                                Log.d(TAG, "Restored (insert): " + firestoreId);
+
+                            } else if (!emotion.equals(existing.emotion)
+                                    || !description.equals(existing.description)) {
+                                // ── UPDATE: entry exists but content differs ───
+                                // This is what was missing — covers edits from
+                                // another device.
+                                existing.emotion          = emotion;
+                                existing.description      = description;
+                                existing.syncedToFirebase = true;
+                                dao.update(existing);
+                                Log.d(TAG, "Restored (update): " + firestoreId);
                             }
-
-                            // Check if this entry already exists in Room.
-                            // Uses the firestoreId index for fast lookup.
-                            JournalEntryEntity existing =
-                                    dao.findByFirestoreId(firestoreId);
-
-                            if (existing != null) {
-                                // Already in Room — skip to avoid duplicates.
-                                Log.d(TAG, "Restore: already exists — " + firestoreId);
-                                continue;
-                            }
-
-                            // Entry is missing from Room — insert it.
-                            // syncedToFirebase = true because it came FROM Firestore.
-                            // Setting it false would cause WorkManager to re-push
-                            // this entry unnecessarily on the next sync run.
-                            JournalEntryEntity entry = new JournalEntryEntity(
-                                    userId, emotion, description, createdAtEpochMs);
-                            entry.firestoreId      = firestoreId;
-                            entry.syncedToFirebase = true;
-                            dao.insert(entry);
-
-                            Log.d(TAG, "Restore: inserted " + firestoreId);
+                            // else: Room matches Firestore — nothing to do.
                         }
 
-                        // All documents processed — notify caller.
-                        onComplete.run();
+                        // ── Step 2: Delete Room entries absent from Firestore ──
+                        // These were deleted on another device.
+                        List<JournalEntryEntity> localEntries = dao.getEntriesByUser(userId);
+                        for (JournalEntryEntity local : localEntries) {
+                            if (local.firestoreId == null) continue;
+                            if (!firestoreIds.contains(local.firestoreId)) {
+                                dao.deleteByEntryId(local.entryId);
+                                Log.d(TAG, "Restored (delete): " + local.firestoreId);
+                            }
+                        }
+
+                        // ── Step 3: Notify ViewModel ─────────────────────────
+                        if (onComplete != null) {
+                            new android.os.Handler(android.os.Looper.getMainLooper())
+                                    .post(onComplete);
+                        }
                     });
                 })
                 .addOnFailureListener(e -> {
-                    // Restore failed (no internet, permission error, etc.)
-                    // Room is served as-is. App still works offline.
                     Log.w(TAG, "Restore failed: " + e.getMessage());
-                    onComplete.run();
+                    if (onComplete != null) {
+                        new android.os.Handler(android.os.Looper.getMainLooper())
+                                .post(onComplete);
+                    }
                 });
     }
 
