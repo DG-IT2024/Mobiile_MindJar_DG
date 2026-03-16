@@ -143,13 +143,6 @@
                 android:layout_marginTop="6dp"
                 android:gravity="center_vertical">
 
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Show password"
-                    android:textSize="12sp" />
-
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
