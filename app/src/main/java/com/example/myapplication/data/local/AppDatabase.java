@@ -11,7 +11,7 @@ import com.example.myapplication.data.local.entity.*;
 
 @Database(
         entities = {JournalEntryEntity.class, VideoEntity.class, HotlineEntity.class},
-        version = 11,
+        version = 12,
         exportSchema = true
 )
 
@@ -35,7 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "mindjar.db"
                             )
-                            .fallbackToDestructiveMigration(true)  // to be removed later.
+                            .fallbackToDestructiveMigration()  // to be removed later.
                             .build();
                 }
             }
